@@ -1,0 +1,15 @@
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+IDI_HAISYO              ICON    DISCARDABLE     "haisyo.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+IDB_CANCEL              BITMAP  DISCARDABLE     "cancel.bmp"
+IDB_CONFIG              BITMAP  DISCARDABLE     "config.bmp"
+
