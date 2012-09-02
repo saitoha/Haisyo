@@ -31,5 +31,15 @@ $(TARGET).res: $(TARGET).rc
 $(TARGET).exe: main.c hook.dll $(TARGET).res
 	$(CC) $(CFLAGS) main.c /link $(LDFLAGS) $(LIBS) $(TARGET).res hook.lib /OUT:$@
 
+dist: $(TARGET).exe
+	$(RM) -r bin
+	mkdir bin
+	$(CP) $(TARGET).exe hook.dll bin/
+	$(RM) -r src
+	mkdir src
+	$(CP) *.c *.h *.rc *.def *.ico *.bmp Makefile src/
+	$(RM) Haisyo.zip
+	zip Haisyo.zip COPYING.txt README.md src/* bin/*
+
 clean:
 	$(RM) *.obj *.dll *.res *.exp *.lib *.log
