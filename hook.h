@@ -24,7 +24,7 @@
  *
  *******************************************************************************/
 
-#if defined(__HOOK_H__)
+#if !defined(__HOOK_H__)
 #define __HOOK_H__ 1
 
 #define EXPORT __declspec(dllexport) 
