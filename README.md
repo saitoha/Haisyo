@@ -7,6 +7,7 @@ Haisyo
 ![Haisyo](http://zuse.jp/misc/haisyo-example.png)
 
 - タスクバーにトレイが出ます。
+
 ![Haisyo](http://zuse.jp/misc/haisyo-tray.png)
 
 ---
