@@ -1,28 +1,33 @@
-/*******************************************************************************
+/*****************************************************************************
+ * Copyright 2005-2012  Hayaki Saito <user@zuse.jp>
  *
- *       hooker.h  -- hooker.c の関数プロトタイプ・グローバル変数定義等
+ * ##### BEGIN GPL LICENSE BLOCK #####
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
  *
- *                          ver.0.0    2005/09/24   H. Saito
- *                          ver.0.1    2005/09/25   H. Saito
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * ##### END GPL LICENSE BLOCK #####
+ *
+ *       hook.h
+ *
+ *                          ver.0.0    2005/09/24   Hayaki Saito
+ *                          ver.0.1    2005/09/25   Hayaki Saito
+ *                          ver.0.2    2012/09/02   Hayaki Saito
  *
  *******************************************************************************/
 
-#pragma once
-
+#if defined(__HOOK_H__)
+#define __HOOK_H__ 1
 
 #define EXPORT __declspec(dllexport) 
-
-//
-//グローバル変数
-//
-char      tmp[256];
-
-
-//
-// 関数宣言
-//
-EXPORT long CALLBACK 
-ReadIniFile(void); 
 
 EXPORT BOOL CALLBACK 
 IsHooking(void); 
@@ -33,56 +38,5 @@ MySetHook(void);
 EXPORT BOOL CALLBACK 
 MyEndHook(void); 
 
-EXPORT LRESULT CALLBACK 
-CBTHookProc(
-			int nCode, 
-			WPARAM wp, 
-			LPARAM lp
-			);
-
-EXPORT LRESULT CALLBACK 
-WndHookProc(
-			int nCode, 
-			WPARAM wp, 
-			LPARAM lp
-			);
-
-EXPORT BOOL CALLBACK
-SlideWindow(
-			HWND  hwnd,
-			int   spd,
-			DWORD dwFlags
-			);
-
-EXPORT BOOL CALLBACK
-ThrowWindow(
-				  HWND hwnd,
-				  RECT *ptwdrc,
-				  int  spd
-				  );
-
-BOOL CALLBACK 
-EnumWindowsProc(
-                HWND hwnd,
-                LPARAM lParam
-				);
-
-EXPORT BOOL CALLBACK 
-EnumActivateProc(
-				 HWND hwnd,
-				 LPARAM lParam
-				 );
-
-BOOL 
-HideWindow(
-		   HWND hWnd,
-		   int vx,
-		   int vy
-		   );
-
-BOOL 
-EmergeWindow(
-			 HWND hwnd,
-			 long spd        //スピード
-			 );
+#endif /* __HOOK_H__ */
 

@@ -1,10 +1,27 @@
-/*******************************************************************************
+/*****************************************************************************
+ * Copyright 2005-2012  Hayaki Saito <user@zuse.jp>
+ *
+ * ##### BEGIN GPL LICENSE BLOCK #####
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * ##### END GPL LICENSE BLOCK #####
+ *
  *       main.c
  *                          ver.0.0    2005/09/24   Hayaki Saito
  *                          ver.0.1    2005/09/25   Hayaki Saito
  *                          var 0.2    2012/09/02   Hayaki Saito
  *
- *******************************************************************************/
+ *****************************************************************************/
 
 #include <windows.h> 
 #include <math.h> 
@@ -271,30 +288,30 @@ EmergeLButtonMenu(HWND  hwnd,   /* parent window handle */
 
 EXPORT HFONT 
 SetMyFont(LPCTSTR face, /* font face */
-		  INT height)   /* font height */
+          INT height)   /* font height */
 /*
-CreateFontÇÃÉâÉbÉpÅ[
-îLWinÇÊÇË
+CreateFont?????b?p?[
+?LWin????
 http://www.kumei.ne.jp/c_lang/sdk/sdk_46.htm
 */
 { 
-	HFONT hFont; 
+    HFONT hFont; 
 
-	hFont = CreateFont(height,                        
-		               0,                       /* width */
-		               0,                       /* escapement */
-		               0,                       /* orientation */
-		               FW_REGULAR,              /* font weight */
-		               FALSE,                   /* italic */
-		               FALSE,                   /* underline */
-		               FALSE,                   /* strike out */
-		               SHIFTJIS_CHARSET,        /* character set */
-		               OUT_DEFAULT_PRECIS,      /* output precision */
-		               CLIP_DEFAULT_PRECIS,     /* cliping precision */
-		               PROOF_QUALITY,           /* output quality */
-		               FIXED_PITCH | FF_MODERN, /* pitch and family */
-		               face); 
-	return hFont; 
+    hFont = CreateFont(height,                        
+                       0,                       /* width */
+                       0,                       /* escapement */
+                       0,                       /* orientation */
+                       FW_REGULAR,              /* font weight */
+                       FALSE,                   /* italic */
+                       FALSE,                   /* underline */
+                       FALSE,                   /* strike out */
+                       SHIFTJIS_CHARSET,        /* character set */
+                       OUT_DEFAULT_PRECIS,      /* output precision */
+                       CLIP_DEFAULT_PRECIS,     /* cliping precision */
+                       PROOF_QUALITY,           /* output quality */
+                       FIXED_PITCH | FF_MODERN, /* pitch and family */
+                       face); 
+    return hFont; 
 }
 
 void
