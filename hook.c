@@ -150,7 +150,7 @@ IsHooking(void)
 EXPORT BOOL CALLBACK 
 MySetHook(void) 
 /*
- * start to hooking
+ * start hooking
  */
 {
 	if(!hInst) 
@@ -169,7 +169,7 @@ MySetHook(void)
 EXPORT BOOL CALLBACK 
 MyEndHook(void) 
 /*
- * exit to hooking
+ * exit hooking
  */
 {
 	/* reset hook */
