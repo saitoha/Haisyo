@@ -40,54 +40,54 @@ BOOL      setflag;
 BOOL CALLBACK
 EnumWindowsProc1(HWND hwnd , LPARAM lp)
 {
-	CHAR buffer[4096];
+    CHAR buffer[4096];
 
-	if (GetClassName(hwnd, buffer, 8))
-	{
-		if (strcmp(buffer, "Button") == 0) 
-		{
-			if (GetWindowText(hwnd, buffer, sizeof(buffer)))
-			{
-				if (strcmp(buffer, IDS_OK) == 0)
-				{
-					SetWindowText(hwnd, IDS_HAISYO);
-				}
-				else
-				{
-					char *p = strstr(buffer, IDS_YES);
-					if (p) 
-					{
-						memcpy(p, IDS_HAISYO, sizeof(IDS_YES));
-					}
-					SetWindowText(hwnd, buffer);
-				}
-			}
-		}
-		else if (strcmp(buffer, "Static") == 0)
-		{
-			if (GetWindowText(hwnd, buffer, sizeof(buffer)))
-			{
-				char *p = strstr(buffer, IDS_KUDASAI);
-				if (p) 
-				{
-					memcpy(p, IDS_ITADAKITAKU, sizeof(IDS_KUDASAI));
-				}
-				p = strstr(buffer, IDS_SHIMASU);
-				if (p) 
-				{
-					memcpy(p, IDS_SHITAKU, sizeof(IDS_SHIMASU));
-				}
-				SetWindowText(hwnd, buffer);
-			}
-			EnumChildWindows(hwnd, (void *)EnumWindowsProc1, (LONG)NULL);
-		}
-		else
-		{
-			EnumChildWindows(hwnd, (void *)EnumWindowsProc1, (LONG)NULL);
-		}
-	}
+    if (GetClassName(hwnd, buffer, 8))
+    {
+        if (strcmp(buffer, "Button") == 0) 
+        {
+            if (GetWindowText(hwnd, buffer, sizeof(buffer)))
+            {
+                if (strcmp(buffer, IDS_OK) == 0)
+                {
+                    SetWindowText(hwnd, IDS_HAISYO);
+                }
+                else
+                {
+                    char *p = strstr(buffer, IDS_YES);
+                    if (p) 
+                    {
+                        memcpy(p, IDS_HAISYO, sizeof(IDS_YES));
+                    }
+                    SetWindowText(hwnd, buffer);
+                }
+            }
+        }
+        else if (strcmp(buffer, "Static") == 0)
+        {
+            if (GetWindowText(hwnd, buffer, sizeof(buffer)))
+            {
+                char *p = strstr(buffer, IDS_KUDASAI);
+                if (p) 
+                {
+                    memcpy(p, IDS_ITADAKITAKU, sizeof(IDS_KUDASAI));
+                }
+                p = strstr(buffer, IDS_SHIMASU);
+                if (p) 
+                {
+                    memcpy(p, IDS_SHITAKU, sizeof(IDS_SHIMASU));
+                }
+                SetWindowText(hwnd, buffer);
+            }
+            EnumChildWindows(hwnd, (void *)EnumWindowsProc1, (LONG)NULL);
+        }
+        else
+        {
+            EnumChildWindows(hwnd, (void *)EnumWindowsProc1, (LONG)NULL);
+        }
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 EXPORT LRESULT CALLBACK
@@ -100,34 +100,34 @@ CBTHookProc(
  * The hook procedure for CBT actions
  */
 { 
-	if (nCode == HCBT_ACTIVATE || nCode == HCBT_QS)
-	{
-		EnumWindowsProc1((HWND)wp, (LONG)NULL);
-	}
+    if (nCode == HCBT_ACTIVATE || nCode == HCBT_QS)
+    {
+        EnumWindowsProc1((HWND)wp, (LONG)NULL);
+    }
 
-	return CallNextHookEx(hCBTHook, nCode, wp, lp); 
+    return CallNextHookEx(hCBTHook, nCode, wp, lp); 
 }
 
 
 int __stdcall
 DllMain(
-		HINSTANCE hInstance,    /* dll instance handle */
-		DWORD     dwReason,     /* reason for calling */
-		LPVOID    lpReserved    /* reserved */
-		)
+        HINSTANCE hInstance,    /* dll instance handle */
+        DWORD     dwReason,     /* reason for calling */
+        LPVOID    lpReserved    /* reserved */
+        )
 /*
  * save module instance handle
  */
-{	
-	switch(dwReason) 
-	{
-	case DLL_PROCESS_ATTACH:
-	    /* when attached */
-		hInst        = hInstance;
-		break;
-	return TRUE;
-	}
-	return TRUE;
+{    
+    switch(dwReason) 
+    {
+    case DLL_PROCESS_ATTACH:
+        /* when attached */
+        hInst        = hInstance;
+        break;
+    return TRUE;
+    }
+    return TRUE;
 }
 
 
@@ -137,14 +137,14 @@ IsHooking(void)
  * detect if this process is hooked
  */
 { 
-	if(setflag) 
-	{
-		return TRUE;
-	}
-	else 
-	{
-		return FALSE;
-	}
+    if(setflag) 
+    {
+        return TRUE;
+    }
+    else 
+    {
+        return FALSE;
+    }
 } 
 
 EXPORT BOOL CALLBACK 
@@ -153,17 +153,17 @@ MySetHook(void)
  * start hooking
  */
 {
-	if(!hInst) 
-	{ 
-		return FALSE;
+    if(!hInst) 
+    { 
+        return FALSE;
     } 
-	/* set hook */
-	hCBTHook = SetWindowsHookEx(WH_CBT, 
-		                        CBTHookProc, 
-		                        hInst, 
-		                        (ULONG)NULL);
-	setflag = TRUE; 
-	return TRUE;
+    /* set hook */
+    hCBTHook = SetWindowsHookEx(WH_CBT, 
+                                CBTHookProc, 
+                                hInst, 
+                                (ULONG)NULL);
+    setflag = TRUE; 
+    return TRUE;
 } 
 
 EXPORT BOOL CALLBACK 
@@ -172,10 +172,10 @@ MyEndHook(void)
  * exit hooking
  */
 {
-	/* reset hook */
-	UnhookWindowsHookEx(hCBTHook);
-	setflag = FALSE; 	
+    /* reset hook */
+    UnhookWindowsHookEx(hCBTHook);
+    setflag = FALSE;     
   
-	return TRUE;
+    return TRUE;
 } 
 
