@@ -29,6 +29,10 @@
 #include "hook.h"
 #include "resource.h"
 
+#if !defined(GWL_HINSTANCE)
+# define GWL_HINSTANCE (-6)
+#endif
+
 HANDLE g_hMutex;
 
 EXPORT HRESULT 
