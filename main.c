@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright 2005-2012  Hayaki Saito <user@zuse.jp>
+ * Copyright 2005-2014  Hayaki Saito <user@zuse.jp>
  *
  * ##### BEGIN GPL LICENSE BLOCK #####
  * This program is free software; you can redistribute it and/or modify
