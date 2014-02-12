@@ -16,28 +16,42 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ##### END GPL LICENSE BLOCK #####
 
- 
-CC=cl.exe /nologo /EHsc
-RC=rc.exe /r
-RM=del /f
-LIBS=User32.lib Gdi32.lib Ole32.lib Shell32.lib
+
+CC=i686-w64-mingw32-gcc
+RC=i686-w64-mingw32-windres
+ZIP=zip
+CP=cp -f
+RM=rm -f
 
 TARGET=haisyo
+LIBS=-luser32 -lgdi32 -lole32 -lshell32 -luuid
 
-all: $(TARGET).exe
+all: $(TARGET).exe hook.dll
 
-hook.dll: hook.lib
+run: all
 
-hook.lib: hook.c hook.def
-	$(CC) /LD hook.c /link $(LIBS) /DEF:hook.def /OUT:hook.dll
+c.o:
+	$(CC) -c $< -o $@
 
-haisyo.RES: haisyo.rc
-	$(RC) $?
+hook.dll: hook.o hook.def
+	$(CC) -shared $< -d hook.def -o $@ $(LIBS)
 
-haisyo.exe: hook.dll haisyo.RES
-	$(CC) main.c /link $(LIBS) /MACHINE:x86 haisyo.RES hook.lib /OUT:$@
+$(TARGET).res.o: $(TARGET).rc
+	$(RC) $< $@
+
+$(TARGET).exe: main.o hook.dll $(TARGET).res.o
+	$(CC) -o $@ $^ $(LIBS) 
+
+dist: $(TARGET).exe
+	$(RM) -r bin
+	mkdir bin
+	$(CP) $(TARGET).exe hook.dll bin/
+	$(RM) -r src
+	mkdir src
+	$(CP) *.c *.h *.rc *.def *.ico *.bmp *.mk src/
+	$(RM) Haisyo.zip
+	$(ZIP) Haisyo.zip COPYING.txt README.md src/* bin/*
 
 clean:
-	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o
-	$(RM) src bin
-
+	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o *.exe
+	$(RM) -r src bin
