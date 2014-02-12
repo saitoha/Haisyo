@@ -10,8 +10,70 @@ Haisyo
 
 ![Haisyo](http://zuse.jp/misc/haisyo-tray.png)
 
----
-Makefileはcygwin make + VC9環境用です。
-気が向いたらmingwビルドできるようにします。
 
-Windows XP sp3 で動作確認しました。
+動作環境
+--------
+
+Windows XP sp3 と Windows 7 sp1 で動作確認しました。
+
+ライセンス
+----------
+GNU GENERAL PUBLIC LICENSE Version 3
+
+
+ダウンロード
+------------
+
+MinGWでビルドしました。
+[Haisyo.zip](http://zuse.jp/misc/Haisyo.zip)
+
+
+ビルド方法
+----------
+
+### MinGWでビルド
+
+* MinGW環境を作ります。
+
+```
+$ sudo apt-get install build-dep mingw-w64
+```
+
+* make します。
+
+```
+$ make -f GNUMakefile dist
+```
+
+* Haisyo.zip ができあがります。
+
+
+### MSVCでビルド
+
+* MSVC環境を作ります。
+
+* nmake します。
+
+```
+$ nmake -f Makefile
+```
+
+* haisyo.exe と haisyo.dll ができあがります。
+  適当な場所に配置して下さい。
+
+
+### Cygwin + MSVCでビルド
+
+* Cygwinをインストールします。makeを入れておいて下さい。
+
+* Visual C++ 2008 を入れます。(Expressでいいです)
+
+* make します。
+
+```
+$ make -f cygwin-msvc.mk dist
+```
+
+  環境により、ちょっとcygwin-msvcをいじる必要があるかもしれません。
+
+
