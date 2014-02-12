@@ -610,7 +610,7 @@ WndProc(HWND hWnd,
 
     case WM_CREATE:
         {
-            if(!MySetHook())
+            if(!SetHaisyoHook())
             {
                 /* if fook is failed */
                 DestroyWindow(hWnd);
@@ -646,7 +646,7 @@ WndProc(HWND hWnd,
         if (IsHooking())
         { 
             /* unregister hook */
-            MyEndHook(); 
+            UnsetHaisyoHook(); 
         } 
 
         /* release Mutex */

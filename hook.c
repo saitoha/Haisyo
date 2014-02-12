@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright 2005-2012  Hayaki Saito <user@zuse.jp>
+ * Copyright 2005-2014  Hayaki Saito <user@zuse.jp>
  *
  * ##### BEGIN GPL LICENSE BLOCK #####
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,7 @@
  *                          ver.0.0    2005/09/24   Hayaki Saito
  *                          ver.0.1    2005/09/25   Hayaki Saito
  *                          ver.0.2    2012/09/02   Hayaki Saito
+ *                          ver.0.3    2014/02/12   Hayaki Saito
  *
  *****************************************************************************/
 
@@ -35,12 +36,13 @@ HHOOK        hCBTHook = 0;
 #pragma data_seg()
 
 HINSTANCE hInst;      /* dll instance */
-BOOL      setflag;
+BOOL      is_hooking;
 
 BOOL CALLBACK
-EnumWindowsProc1(HWND hwnd , LPARAM lp)
+HaisyoniseWindow(HWND hwnd , LPARAM lp)
 {
     CHAR buffer[4096];
+    CHAR *p = NULL;
 
     if (GetClassName(hwnd, buffer, 8))
     {
@@ -54,7 +56,7 @@ EnumWindowsProc1(HWND hwnd , LPARAM lp)
                 }
                 else
                 {
-                    char *p = strstr(buffer, IDS_YES);
+                    p = strstr(buffer, IDS_YES);
                     if (p) 
                     {
                         memcpy(p, IDS_HAISYO, sizeof(IDS_YES));
@@ -67,7 +69,7 @@ EnumWindowsProc1(HWND hwnd , LPARAM lp)
         {
             if (GetWindowText(hwnd, buffer, sizeof(buffer)))
             {
-                char *p = strstr(buffer, IDS_KUDASAI);
+                p = strstr(buffer, IDS_KUDASAI);
                 if (p) 
                 {
                     memcpy(p, IDS_ITADAKITAKU, sizeof(IDS_KUDASAI));
@@ -79,11 +81,11 @@ EnumWindowsProc1(HWND hwnd , LPARAM lp)
                 }
                 SetWindowText(hwnd, buffer);
             }
-            EnumChildWindows(hwnd, (void *)EnumWindowsProc1, (LONG)NULL);
+            EnumChildWindows(hwnd, HaisyoniseWindow, (LONG)NULL);
         }
         else
         {
-            EnumChildWindows(hwnd, (void *)EnumWindowsProc1, (LONG)NULL);
+            EnumChildWindows(hwnd, HaisyoniseWindow, (LONG)NULL);
         }
     }
 
@@ -102,7 +104,7 @@ CBTHookProc(
 { 
     if (nCode == HCBT_ACTIVATE || nCode == HCBT_QS)
     {
-        EnumWindowsProc1((HWND)wp, (LONG)NULL);
+        HaisyoniseWindow((HWND)wp, (LONG)NULL);
     }
 
     return CallNextHookEx(hCBTHook, nCode, wp, lp); 
@@ -137,18 +139,11 @@ IsHooking(void)
  * detect if this process is hooked
  */
 { 
-    if(setflag) 
-    {
-        return TRUE;
-    }
-    else 
-    {
-        return FALSE;
-    }
+    return is_hooking;
 } 
 
 EXPORT BOOL CALLBACK 
-MySetHook(void) 
+SetHaisyoHook(void) 
 /*
  * start hooking
  */
@@ -162,19 +157,19 @@ MySetHook(void)
                                 CBTHookProc, 
                                 hInst, 
                                 (ULONG)NULL);
-    setflag = TRUE; 
+    is_hooking = TRUE; 
     return TRUE;
 } 
 
 EXPORT BOOL CALLBACK 
-MyEndHook(void) 
+UnsetHaisyoHook(void) 
 /*
  * exit hooking
  */
 {
     /* reset hook */
     UnhookWindowsHookEx(hCBTHook);
-    setflag = FALSE;     
+    is_hooking = FALSE;     
   
     return TRUE;
 } 

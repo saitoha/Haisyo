@@ -33,10 +33,10 @@ EXPORT BOOL CALLBACK
 IsHooking(void); 
 
 EXPORT BOOL CALLBACK 
-MySetHook(void); 
+SetHaisyoHook(void); 
 
 EXPORT BOOL CALLBACK 
-MyEndHook(void); 
+UnsetHaisyoHook(void); 
 
 #endif /* __HOOK_H__ */
 
