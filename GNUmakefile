@@ -48,7 +48,7 @@ dist: $(TARGET).exe
 	$(CP) $(TARGET).exe hook.dll bin/
 	$(RM) -r src
 	mkdir src
-	$(CP) *.c *.h *.rc *.def *.ico *.bmp *.mk src/
+	$(CP) *.c *.h *.rc *.def *.ico *.bmp *.mk Makefile GNUmakefile src/
 	$(RM) Haisyo.zip
 	$(ZIP) Haisyo.zip COPYING.txt README.md src/* bin/*
 
