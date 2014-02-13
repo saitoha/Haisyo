@@ -1,0 +1,11 @@
+.gitignore
+.*.swp
+*.RES
+*.exp
+*.lib
+*.o
+*.obj
+*.tds
+*.dll
+*.exe
+*~
