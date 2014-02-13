@@ -17,6 +17,8 @@
 # ##### END GPL LICENSE BLOCK #####
 
 
+#CC=i386-mingw32-gcc -O2 -Wall -mwindows
+#RC=i386-mingw32-windres
 CC=i686-w64-mingw32-gcc -O2 -Wall -mwindows
 RC=i686-w64-mingw32-windres
 ZIP=zip
@@ -44,14 +46,14 @@ upload: Haisyo.zip
 c.o:
 	$(CC) -c $< -o $@
 
-hook.dll: hook.o hook.def
-	$(CC) -shared $< -d hook.def -o $@ $(LIBS)
+hook.dll: hook.o
+	$(CC) -shared -o $@ $< $(LIBS)
 
 $(TARGET).res.o: $(TARGET).rc
 	$(RC) $< $@
 
 $(TARGET).exe: main.o hook.dll $(TARGET).res.o
-	$(CC) -o $@ $^ $(LIBS) 
+	$(CC) -o $@ $^ $(LIBS)
 
 Haisyo.zip: clean $(TARGET).exe
 	$(RM) -r bin
