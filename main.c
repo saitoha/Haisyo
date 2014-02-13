@@ -421,6 +421,8 @@ DrawActiveRect(LPDRAWITEMSTRUCT  lpDI,
                      lpDI->rcItem.bottom - marginbottom);
     SelectObject(lpDI->hDC, hOldPen);     
     DeleteObject(hPen); 
+    SelectObject(lpDI->hDC, hOldBrush);     
+    DeleteObject(hBrush); 
     return TRUE;
 }
 
