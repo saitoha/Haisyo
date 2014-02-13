@@ -17,9 +17,9 @@
 # ##### END GPL LICENSE BLOCK #####
 
  
-CC=cl.exe /nologo /EHsc
+CC=cl.exe /nologo /O2
 RC=rc.exe /r
-RM=del /f
+RM=del /f /q
 LIBS=User32.lib Gdi32.lib Ole32.lib Shell32.lib
 
 TARGET=haisyo

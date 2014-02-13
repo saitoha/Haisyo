@@ -34,6 +34,13 @@ run: all
 
 dist: Haisyo.zip
 
+clean:
+	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o *.exe
+	$(RM) -r src bin
+
+upload: Haisyo.zip
+	scp $< zuse:/var/www/misc/
+
 c.o:
 	$(CC) -c $< -o $@
 
@@ -55,11 +62,4 @@ Haisyo.zip: clean $(TARGET).exe
 	$(CP) *.c *.h *.rc *.def *.ico *.bmp *.mk Makefile GNUmakefile src/
 	$(RM) Haisyo.zip
 	$(ZIP) Haisyo.zip COPYING.txt README.md src/* bin/*
-
-clean:
-	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o *.exe
-	$(RM) -r src bin
-
-upload: Haisyo.zip
-	scp $< zuse:/var/www/misc/
 
