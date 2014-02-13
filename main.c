@@ -108,6 +108,10 @@ ResistStartUp(HWND    hDlg,
 
     /* get full-path for current module */
     dwRet = GetModuleFileName(NULL, szModulePath, sizeof(szModulePath));
+    if (dwRet == 0)
+    {
+        return FALSE;
+    }
 
     /* get the absolute path of startup directory */
     SHGetSpecialFolderPath(hDlg, szSysPath, CSIDL_STARTUP, TRUE);
