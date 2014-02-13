@@ -17,7 +17,7 @@
 # ##### END GPL LICENSE BLOCK #####
 
 
-CC=i686-w64-mingw32-gcc
+CC=i686-w64-mingw32-gcc -O2 -Wall -mwindows
 RC=i686-w64-mingw32-windres
 ZIP=zip
 CP=cp -f
@@ -26,9 +26,13 @@ RM=rm -f
 TARGET=haisyo
 LIBS=-luser32 -lgdi32 -lole32 -lshell32 -luuid
 
+.PHONY: all run dist clean upload
+
 all: $(TARGET).exe hook.dll
 
 run: all
+
+dist: Haisyo.zip
 
 c.o:
 	$(CC) -c $< -o $@
@@ -42,7 +46,7 @@ $(TARGET).res.o: $(TARGET).rc
 $(TARGET).exe: main.o hook.dll $(TARGET).res.o
 	$(CC) -o $@ $^ $(LIBS) 
 
-dist: $(TARGET).exe
+Haisyo.zip: clean $(TARGET).exe
 	$(RM) -r bin
 	mkdir bin
 	$(CP) $(TARGET).exe hook.dll bin/
@@ -55,3 +59,7 @@ dist: $(TARGET).exe
 clean:
 	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o *.exe
 	$(RM) -r src bin
+
+upload: Haisyo.zip
+	scp $< zuse:/var/www/misc/
+
