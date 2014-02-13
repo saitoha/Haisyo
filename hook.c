@@ -31,12 +31,16 @@
 #include "resource.h"
 
 /* shared instance in system global */
-#pragma data_seg(".hook")
-HHOOK        hCBTHook = 0; 
-#pragma data_seg()
+#if defined(__GNUC__)
+HHOOK hCBTHook __attribute__((section(".hook"), shared)) = NULL;
+#else
+# pragma data_seg(".hook")
+HHOOK hCBTHook = NULL; 
+# pragma data_seg()
+#endif
 
 HINSTANCE hInst;      /* dll instance */
-BOOL      is_hooking;
+BOOL is_hooking;
 
 BOOL CALLBACK
 HaisyoniseWindow(HWND hwnd , LPARAM lp)
