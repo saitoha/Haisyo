@@ -24,7 +24,6 @@
  *****************************************************************************/
 
 #include <windows.h> 
-#include <math.h> 
 #include <shlobj.h>
 #include "hook.h"
 #include "resource.h"
@@ -105,6 +104,7 @@ ResistStartUp(HWND    hDlg,
     DWORD dwRet = 0;
     TCHAR szModulePath[_MAX_PATH];
     TCHAR szSysPath[_MAX_PATH];
+    HRESULT hr = S_OK;
 
     /* get full-path for current module */
     dwRet = GetModuleFileName(NULL, szModulePath, sizeof(szModulePath));
@@ -113,14 +113,21 @@ ResistStartUp(HWND    hDlg,
         return FALSE;
     }
 
-    /* get the absolute path of startup directory */
-    SHGetSpecialFolderPath(hDlg, szSysPath, CSIDL_STARTUP, TRUE);
+    /* get the absolute path of startup directory
+     * don't use SHGetSpecialFolderPath for compatibility */
+    hr = SHGetFolderPath(NULL, CSIDL_COMMON_STARTUP, NULL,
+                         0 /* SHGFP_TYPE_CURRENT */, szSysPath);
+    if (!SUCCEEDED(hr))
+    {
+        return FALSE;
+    }
 
-    /* build the absolute path of target shortcut file */
+    /* build the absolute path of target shortcut file
+     * (don't use PathCombine for compatibility) */
     strcat(szSysPath, pszFile);
 
     /* create shortcut file */
-    if ( SUCCEEDED(CoInitialize(NULL)) )
+    if (SUCCEEDED(CoInitialize(NULL)))
     {
         CreateShortcut(szSysPath,
                        szModulePath,
