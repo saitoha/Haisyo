@@ -102,7 +102,7 @@ ResistStartUp(HWND    hDlg,
  * ref: http://techtips.belution.com/ja/vc/0030/
  */
 {
-    DWORD dwRet;
+    DWORD dwRet = 0;
     TCHAR szModulePath[_MAX_PATH];
     TCHAR szSysPath[_MAX_PATH];
 
@@ -431,7 +431,7 @@ DrawMenuText(LPDRAWITEMSTRUCT lpDI,
              LONG             margintop)
 {
     INT       oldBkMode;
-    COLORREF  oldTextColor;
+    COLORREF  oldTextColor = 0;
     HFONT     hFont    = SetMyFont(fontface, fontsize);
     HFONT     hFontOld = (HFONT)SelectObject(lpDI->hDC, hFont);
 
@@ -566,10 +566,6 @@ WndProc(HWND hWnd,
  */ 
 { 
     static HMENU hmenu; 
-    static POINT screen;
-    static POINT pt;
-    static POINT trace;
-    static UINT menuid;
 
     enum { MENU_STARTUP, MENU_END };
     LPCTSTR str[] = { IDS_CONFIG, IDS_CANCEL };
