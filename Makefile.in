@@ -16,17 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ##### END GPL LICENSE BLOCK #####
 
-
-#CC=i386-mingw32-gcc -O2 -Wall -mwindows
-#RC=i386-mingw32-windres
 CC=@CC@ -O2 -Wall -mwindows
 RC=@RC@
 ZIP=@ZIP@
-CP=cp -f
+TAR=tar
+CP=cp
 RM=rm -f
+MKDIR=mkdir -p
 
 TARGET=haisyo
 LIBS=-luser32 -lgdi32 -lole32 -lshell32 -luuid
+PACKAGE=@PACKAGE_NAME@-@PACKAGE_VERSION@
+ZIPFILE=$(PACKAGE).zip
 
 .PHONY: all run dist clean upload
 
@@ -34,13 +35,13 @@ all: $(TARGET).exe hook.dll
 
 run: all
 
-dist: Haisyo.zip
+dist: clean $(ZIPFILE)
 
 clean:
 	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o *.exe
-	$(RM) -r src bin
+	$(RM) -r @PACKAGE_NAME@
 
-upload: Haisyo.zip
+upload: $(ZIPFILE)
 	scp $< zuse:/var/www/misc/
 
 c.o:
@@ -55,13 +56,12 @@ $(TARGET).res.o: $(TARGET).rc
 $(TARGET).exe: main.o hook.dll $(TARGET).res.o
 	$(CC) -o $@ $^ $(LIBS)
 
-Haisyo.zip: clean $(TARGET).exe
-	$(RM) -r bin
-	mkdir bin
-	$(CP) $(TARGET).exe hook.dll bin/
-	$(RM) -r src
-	mkdir src
-	$(CP) *.c *.h *.rc *.def *.ico *.bmp *.mk Makefile GNUmakefile src/
-	$(RM) Haisyo.zip
-	$(ZIP) Haisyo.zip COPYING.txt README.md src/* bin/*
-
+$(ZIPFILE): $(TARGET).exe
+	$(RM) $@
+	$(RM) -r $(PACKAGE)
+	$(MKDIR) $(PACKAGE)/src
+	$(CP) COPYING.txt README.md $(PACKAGE)
+	$(CP) *.exe *.dll $(PACKAGE)
+	$(CP) *.c *.h *.rc *.def *.ico *.bmp $(PACKAGE)/src
+	$(CP) *.mk Makefile.in configure config.h.in $(PACKAGE)/src/
+	$(ZIP) -r $@ $(PACKAGE)
