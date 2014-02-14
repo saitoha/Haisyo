@@ -34,7 +34,7 @@
 
 HANDLE g_hMutex;
 
-EXPORT HRESULT 
+HRESULT 
 CreateShortcut(LPSTR pszLink,
                LPSTR pszFile,
                LPSTR pszDescription,
@@ -48,24 +48,24 @@ CreateShortcut(LPSTR pszLink,
  *  ref: http://techtips.belution.com/ja/vc/0030/
  */
 {
-    HRESULT hres;
+    HRESULT hr;
     IShellLink *psl;
 
     /* Create a object implements IShellLink */
-    hres = CoCreateInstance(&CLSID_ShellLink, 
+    hr = CoCreateInstance(&CLSID_ShellLink, 
                             NULL, 
                             CLSCTX_INPROC_SERVER,              
                             &IID_IShellLink,
                             (void **)&psl);
-    if (SUCCEEDED(hres))
+    if (SUCCEEDED(hr))
     {
         IPersistFile *ppf;
 
         /* get IPersist */
-        hres = psl->lpVtbl->QueryInterface(psl,
-                                           &IID_IPersistFile,
-                                           (void **)&ppf);
-        if (SUCCEEDED(hres))
+        hr = psl->lpVtbl->QueryInterface(psl,
+                                         &IID_IPersistFile,
+                                         (void **)&ppf);
+        if (SUCCEEDED(hr))
         {
             WORD wsz[MAX_PATH];
 
@@ -79,7 +79,7 @@ CreateShortcut(LPSTR pszLink,
             MultiByteToWideChar(CP_ACP, 0, pszLink, -1, wsz, MAX_PATH);
 
             /* persist to a file */
-            hres = ppf->lpVtbl->Save(ppf, wsz, TRUE);
+            hr = ppf->lpVtbl->Save(ppf, wsz, TRUE);
 
             /* release IPersistFile */
             ppf->lpVtbl->Release(ppf);
@@ -87,15 +87,15 @@ CreateShortcut(LPSTR pszLink,
         /* release IShellLink */
         psl->lpVtbl->Release(psl);
     }
-    return hres;
+    return hr;
 }
 
 
-EXPORT BOOL
-ResistStartUp(HWND    hDlg,
-              LPSTR   pszFile,
-              LPSTR   pszDescription,
-              LPSTR   pszIconPath)
+BOOL
+ResisterStartUp(HWND    hDlg,
+                LPSTR   pszFile,
+                LPSTR   pszDescription,
+                LPSTR   pszIconPath)
 /*
  * Register shortcut to startup directory
  * ref: http://techtips.belution.com/ja/vc/0030/
@@ -134,8 +134,7 @@ ResistStartUp(HWND    hDlg,
                        pszFile, 
                        pszDescription, 
                        NULL,
-                       pszIconPath
-                       ,
+                       pszIconPath,
                        0,
                        0);
         CoUninitialize();
@@ -144,7 +143,8 @@ ResistStartUp(HWND    hDlg,
 }
 
 EXPORT BOOL
-TransparentBltEx(HDC       hdc,        /* device context */
+TransparentBltEx(
+                 HDC       hdc,        /* device context */
                  PRECT     prc,        /* target rect */
                  HBITMAP   hBmp,       /* source bitmap handle */
                  LONG      leftmargin, /* left margin of drawing region */
@@ -180,26 +180,16 @@ TransparentBltEx(HDC       hdc,        /* device context */
     hMaskBmp = CreateBitmap(bm.bmWidth, bm.bmHeight, 1, 1, NULL);  
     SelectObject(hMaskDC, hMaskBmp);
 
-    bRet = BitBlt(hMaskDC,
-                  0,
-                  0,
-                  bm.bmWidth,
-                  bm.bmHeight,
-                  hBmpDC,
-                  0,
-                  0,
-                  SRCCOPY);
-    
+    bRet = BitBlt(hMaskDC, 0, 0, bm.bmWidth, bm.bmHeight,
+                  hBmpDC, 0, 0, SRCCOPY);
+
+#if !defined(HAVE_DSTERASE)
+/* DSTERASE: dest = dest & (~src) : DSna */
+#define DSTERASE 0x00220326
+#endif
     /* fill background black */
-    bRet = BitBlt(hBmpDC,
-                  0,
-                  0,
-                  bm.bmWidth,
-                  bm.bmHeight,
-                  hMaskDC,
-                  0,
-                  0,
-                  0x00220326); /* DSTERASE: dest = dest & (~src) : DSna */
+    bRet = BitBlt(hBmpDC, 0, 0, bm.bmWidth, bm.bmHeight,
+                  hMaskDC, 0, 0, DSTERASE);
 
     /* draw background */
     bRet = BitBlt(hdc, 
@@ -207,10 +197,7 @@ TransparentBltEx(HDC       hdc,        /* device context */
                   prc->top  + topmargin, 
                   prc->right,
                   prc->bottom, 
-                  hMaskDC, 
-                  0, 
-                  0,
-                  SRCAND);
+                  hMaskDC, 0, 0, SRCAND);
 
     /* draw foreground */
     bRet = BitBlt(hdc, 
@@ -218,10 +205,7 @@ TransparentBltEx(HDC       hdc,        /* device context */
                   prc->top  + topmargin, 
                   prc->right,
                   prc->bottom, 
-                  hBmpDC, 
-                  0, 
-                  0,
-                  SRCPAINT);
+                  hBmpDC, 0, 0, SRCPAINT);
 
     DeleteObject(&bm);
     DeleteObject(hMaskBmp);
@@ -608,7 +592,7 @@ WndProc(HWND hWnd,
         switch(wp)
         {
         case IDM_STARTUP:            
-            ResistStartUp(hWnd, "\\" IDS_HAISYO ".lnk", "", NULL);
+            ResisterStartUp(hWnd, "\\" IDS_HAISYO ".lnk", "", NULL);
             break;
 
         case IDM_END:
@@ -731,3 +715,4 @@ WinMain(HINSTANCE hCurInst,
     return msg.wParam; 
 }
 
+/* EOF */

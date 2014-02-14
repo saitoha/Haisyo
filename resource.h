@@ -38,4 +38,4 @@
 #define IDS_SHIMASU                     "ÇµÇ‹Ç∑ÅB"
 #define IDS_SHITAKU                     "ÇµÇΩÇ≠ÅB"
 
-
+/* EOF */

@@ -1,3 +1,5 @@
+/* Hello, Emacs, this is -*-C-*- */
+
 /*****************************************************************************
  * Copyright 2005-2014  Hayaki Saito <user@zuse.jp>
  *
@@ -25,7 +27,6 @@
  *****************************************************************************/
 
 #include <windows.h>
-#include <winuser.h>
 #include <shlwapi.h>
 #include "hook.h"
 #include "resource.h"
@@ -106,9 +107,14 @@ CBTHookProc(
  * The hook procedure for CBT actions
  */
 { 
-    if (nCode == HCBT_ACTIVATE || nCode == HCBT_QS)
+    switch (nCode)
     {
+    case HCBT_ACTIVATE:
+    case HCBT_QS:
         HaisyoniseWindow((HWND)wp, (LONG)NULL);
+        break;
+    default:
+        break;
     }
 
     return CallNextHookEx(hCBTHook, nCode, wp, lp); 
@@ -120,7 +126,7 @@ DllMain(
         HINSTANCE hInstance,    /* dll instance handle */
         DWORD     dwReason,     /* reason for calling */
         LPVOID    lpReserved    /* reserved */
-        )
+       )
 /*
  * save module instance handle
  */
