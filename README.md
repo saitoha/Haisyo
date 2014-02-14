@@ -34,18 +34,29 @@ MinGWでビルドしました。
 ### MinGWでビルド
 
 * MinGW環境を作ります。
+  Debianだと以下のようにしてクロスコンパイル環境を作ります。
 
 ```
 $ sudo apt-get install build-dep mingw-w64
 ```
 
+  MacやCygwinでもコンパイルできます。
+
+
+* ./configure します。
+
+```
+$ ./configure
+```
+
 * make します。
 
 ```
-$ make -f GNUMakefile dist
+$ make dist
 ```
 
-* Haisyo.zip ができあがります。
+* zip パッケージができます。
+  Windows環境にもっていってください。
 
 
 ### MSVCでビルド
