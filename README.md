@@ -55,7 +55,7 @@ $ make -f GNUMakefile dist
 * nmake します。
 
 ```
-$ nmake -f Makefile
+$ nmake -f msvc.mk
 ```
 
 * haisyo.exe と haisyo.dll ができあがります。
