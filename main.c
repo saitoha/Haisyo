@@ -636,11 +636,9 @@ WndProc(HWND hWnd,
 
     case WM_DESTROY:
         /* clean up  */
-        if (IsHooking())
-        { 
-            /* unregister hook */
-            UnsetHaisyoHook(); 
-        } 
+
+        /* unregister hook */
+        UnsetHaisyoHook(); 
 
         /* release Mutex */
         CloseHandle(g_hMutex);

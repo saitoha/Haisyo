@@ -135,22 +135,14 @@ DllMain(
     {
     case DLL_PROCESS_ATTACH:
         /* when attached */
-        hInst        = hInstance;
+        hInst = hInstance;
         break;
-    return TRUE;
+    default:
+        break;
     }
     return TRUE;
 }
 
-
-EXPORT BOOL CALLBACK 
-IsHooking(void) 
-/*
- * detect if this process is hooked
- */
-{ 
-    return is_hooking;
-} 
 
 EXPORT BOOL CALLBACK 
 SetHaisyoHook(void) 
@@ -162,6 +154,12 @@ SetHaisyoHook(void)
     { 
         return FALSE;
     } 
+
+    if (is_hooking)
+    {
+        return FALSE;
+    }
+
     /* set hook */
     hCBTHook = SetWindowsHookEx(WH_CBT, 
                                 CBTHookProc, 
@@ -178,9 +176,14 @@ UnsetHaisyoHook(void)
  */
 {
     /* reset hook */
-    UnhookWindowsHookEx(hCBTHook);
+    if (is_hooking)
+    {
+        (BOOL) UnhookWindowsHookEx(hCBTHook);
+    }
+
+    hCBTHook = NULL;
     is_hooking = FALSE;     
-  
     return TRUE;
 } 
 
+/* EOF */

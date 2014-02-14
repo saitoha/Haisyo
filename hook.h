@@ -30,9 +30,6 @@
 #define EXPORT __declspec(dllexport) 
 
 EXPORT BOOL CALLBACK 
-IsHooking(void); 
-
-EXPORT BOOL CALLBACK 
 SetHaisyoHook(void); 
 
 EXPORT BOOL CALLBACK 
