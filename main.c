@@ -23,6 +23,7 @@
  *
  *****************************************************************************/
 
+#include "config.h"
 #include <windows.h> 
 #include <shlobj.h>
 #include "hook.h"
@@ -101,10 +102,14 @@ ResisterStartUp(HWND    hDlg,
  * ref: http://techtips.belution.com/ja/vc/0030/
  */
 {
+#if defined(HAVE_SHGETFOLDERPATH)
+    HRESULT hr = E_FAIL;
+#elif defined(HAVE_SHGETSPECIALFOLDERPATH)
+    BOOL bRet = FALSE;
+#endif
     DWORD dwRet = 0;
     TCHAR szModulePath[_MAX_PATH];
     TCHAR szSysPath[_MAX_PATH];
-    HRESULT hr = S_OK;
 
     /* get full-path for current module */
     dwRet = GetModuleFileName(NULL, szModulePath, sizeof(szModulePath));
@@ -113,14 +118,24 @@ ResisterStartUp(HWND    hDlg,
         return FALSE;
     }
 
-    /* get the absolute path of startup directory
-     * don't use SHGetSpecialFolderPath for compatibility */
+    /* get the absolute path of startup directory */
+#if defined(_MSC_VER) || defined(HAVE_SHGETFOLDERPATH)
     hr = SHGetFolderPath(NULL, CSIDL_COMMON_STARTUP, NULL,
                          0 /* SHGFP_TYPE_CURRENT */, szSysPath);
+    /* note that hr may be S_FALSE (CSIDL is valid but the folder is not found) */
     if (!SUCCEEDED(hr))
     {
         return FALSE;
     }
+#elif defined(HAVE_SHGETSPECIALFOLDERPATH)
+    bRet = SHGetSpecialFolderPath(hDlg, szSysPath, CSIDL_STARTUP, TRUE);
+    if (!bRet)
+    {
+        return FALSE;
+    }
+#else
+    /* TODO: try to do dynamic import using LoadLibrary */
+#endif
 
     /* build the absolute path of target shortcut file
      * (don't use PathCombine for compatibility) */

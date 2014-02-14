@@ -26,6 +26,7 @@
  *
  *****************************************************************************/
 
+#include "config.h"
 #include <windows.h>
 #include <shlwapi.h>
 #include "hook.h"
