@@ -19,7 +19,6 @@
 CC=@CC@ -O2 -Wall -mwindows
 RC=@RC@
 ZIP=@ZIP@
-TAR=tar
 CP=cp
 RM=rm -f
 MKDIR=mkdir -p
@@ -29,40 +28,49 @@ LIBS=-luser32 -lgdi32 -lole32 -lshell32 -luuid
 PACKAGE=@PACKAGE_NAME@-@PACKAGE_VERSION@
 ZIPFILE=$(PACKAGE).zip
 
-.PHONY: all run dist clean upload
+.PHONY: all build run dist clean upload
 
-all: $(TARGET).exe hook.dll
+all: build
 
-run: all
-	cygstart ./$(TARGET).exe
+build: $(TARGET)@EXEEXT@ hook.dll
+
+run: build
+	cygstart ./$(TARGET)@EXEEXT@
 
 dist: clean $(ZIPFILE)
 
 clean:
-	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o *.exe
-	$(RM) -r @PACKAGE_NAME@
+	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.@OBJEXT@ *@EXEEXT@
+	$(RM) -r $(PACKAGE) 
 
 upload: $(ZIPFILE)
 	scp $< zuse:/var/www/misc/
 
-c.o:
+c.@OBJEXT@: Makefile 
 	$(CC) -c $< -o $@
 
-hook.dll: hook.o
+hook.dll: hook.@OBJEXT@
 	$(CC) -shared -o $@ $< $(LIBS)
 
-$(TARGET).res.o: $(TARGET).rc
+$(TARGET).res.@OBJEXT@: $(TARGET).rc
 	$(RC) $< $@
 
-$(TARGET).exe: main.o hook.dll $(TARGET).res.o
+$(TARGET)@EXEEXT@: main.@OBJEXT@ hook.dll $(TARGET).res.@OBJEXT@
 	$(CC) -o $@ $^ $(LIBS)
 
-$(ZIPFILE): $(TARGET).exe
+$(ZIPFILE): build
 	$(RM) $@
 	$(RM) -r $(PACKAGE)
 	$(MKDIR) $(PACKAGE)/src
 	$(CP) COPYING.txt README.md $(PACKAGE)
-	$(CP) *.exe *.dll $(PACKAGE)
+	$(CP) *@EXEEXT@ *.dll $(PACKAGE)
 	$(CP) *.c *.h *.rc *.def *.ico *.bmp $(PACKAGE)/src
 	$(CP) *.mk Makefile.in configure config.h.in $(PACKAGE)/src/
 	$(ZIP) -r $@ $(PACKAGE)
+
+configure: configure.ac
+	autoconf
+
+Makefile: Makefile.in configure
+	./configure
+

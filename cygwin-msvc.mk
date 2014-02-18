@@ -3,7 +3,7 @@ VCVERSION := 9.0
 SDKVERSION := 6.0A
 
 CC=cl.exe /nologo
-RC=rc.exe /nologo
+RC=rc.exe
 
 TARGET=haisyo
 VSDIR=C:\Program Files\Microsoft Visual Studio $(VCVERSION)\VC
@@ -31,8 +31,7 @@ hook.dll: hook.c
 	
 
 $(TARGET).res: $(TARGET).rc
-	#$(RC) $<
-	windres $< $@
+	$(RC) $<
 
 $(TARGET).exe: main.c hook.dll $(TARGET).res
 	$(CC) $(CFLAGS) main.c \

@@ -3496,7 +3496,7 @@ if test $ac_have_decl = 1; then :
   $as_echo "#define HAVE_SHGETFOLDERPATH 1" >>confdefs.h
 
 else
-  as_fn_error $? "oops! lstrlen is missing" "$LINENO" 5
+  as_fn_error $? "oops! lstrlen is missing." "$LINENO" 5
 fi
 
 ac_fn_c_check_decl "$LINENO" "DSTERASE" "ac_cv_have_decl_DSTERASE" "
@@ -3552,7 +3552,7 @@ if test $ac_have_decl = 1; then :
   $as_echo "#define HAVE_SHGETSPECIALFOLDERPATH 1" >>confdefs.h
 
 else
-  as_fn_error $? "fuck! both of SHGetFolderPathA and SHGetSpecialFolderPathA are missing" "$LINENO" 5
+  as_fn_error $? "fuck! both of SHGetFolderPathA and SHGetSpecialFolderPathA are missing." "$LINENO" 5
 fi
 
 

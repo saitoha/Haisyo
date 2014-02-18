@@ -60,7 +60,7 @@ AC_CHECK_HEADERS([windows.h shlwapi.h shlobj.h],
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_DECLS([lstrlen],
                [AC_DEFINE(HAVE_SHGETFOLDERPATH)],
-               [AC_MSG_ERROR([oops! lstrlen is missing])],
+               [AC_MSG_ERROR([oops! lstrlen is missing.])],
                [
                 #include <shlwapi.h>
                ])
@@ -75,7 +75,7 @@ AC_CHECK_DECLS([SHGetFolderPathA],
                [
                 AC_CHECK_DECLS([SHGetSpecialFolderPathA],
                                [AC_DEFINE(HAVE_SHGETSPECIALFOLDERPATH)],
-                               [AC_MSG_ERROR([fuck! both of SHGetFolderPathA and SHGetSpecialFolderPathA are missing])],
+                               [AC_MSG_ERROR([fuck! both of SHGetFolderPathA and SHGetSpecialFolderPathA are missing.])],
                                [
                                 #include <shlwapi.h>
                                ])
