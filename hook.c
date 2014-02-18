@@ -54,7 +54,7 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
     {
         if (strcmp(buffer, "Button") == 0) 
         {
-            if (GetWindowText(hwnd, buffer, sizeof(buffer)))
+            if (GetWindowText(hwnd, buffer, sizeof(buffer) - 16))
             {
                 if (strcmp(buffer, IDS_OK) == 0)
                 {
@@ -71,9 +71,9 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
                 }
             }
         }
-        else if (strcmp(buffer, "Static") == 0)
+        else /* if (strcmp(buffer, "Static") == 0) */
         {
-            if (GetWindowText(hwnd, buffer, sizeof(buffer)))
+            if (GetWindowText(hwnd, buffer, sizeof(buffer) - 16))
             {
                 p = strstr(buffer, IDS_KUDASAI);
                 if (p) 
@@ -83,14 +83,15 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
                 p = strstr(buffer, IDS_SHIMASU);
                 if (p) 
                 {
-                    memcpy(p, IDS_SHITAKU, sizeof(IDS_SHIMASU));
+                    int postlen = strlen(p + sizeof(IDS_SHIMASU) - 1);
+                    memmove(p + sizeof(IDS_SHITAKU) - 1,
+                                       p + sizeof(IDS_SHIMASU) - 1,
+                                       postlen + 1);
+                    memcpy(p, IDS_SHITAKU, sizeof(IDS_SHITAKU) - 1);
+                    //*(p + sizeof(IDS_SHITAKU) + postlen) = 0;
                 }
                 SetWindowText(hwnd, buffer);
             }
-            EnumChildWindows(hwnd, HaisyoniseWindow, (LONG)NULL);
-        }
-        else
-        {
             EnumChildWindows(hwnd, HaisyoniseWindow, (LONG)NULL);
         }
     }

@@ -35,7 +35,7 @@
 #define IDS_YES                         "ÇÕÇ¢"
 #define IDS_KUDASAI                     "Ç≠ÇæÇ≥Ç¢"
 #define IDS_ITADAKITAKU                 "í∏Ç´ÇΩÇ≠"
-#define IDS_SHIMASU                     "ÇµÇ‹Ç∑ÅB"
-#define IDS_SHITAKU                     "ÇµÇΩÇ≠ÅB"
+#define IDS_SHIMASU                     "ÇµÇ‹Ç∑"
+#define IDS_SHITAKU                     "Ç≥ÇπÇƒí∏Ç´ÇΩÇ≠"
 
 /* EOF */
