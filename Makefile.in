@@ -34,6 +34,7 @@ ZIPFILE=$(PACKAGE).zip
 all: $(TARGET).exe hook.dll
 
 run: all
+	cygstart ./$(TARGET).exe
 
 dist: clean $(ZIPFILE)
 
