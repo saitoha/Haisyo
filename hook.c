@@ -34,10 +34,10 @@
 
 /* shared instance in system global */
 #if defined(__GNUC__)
-HHOOK hCBTHook __attribute__((section(".hook"), shared)) = NULL;
+HHOOK hHook __attribute__((section(".hook"), shared)) = NULL;
 #else
 # pragma data_seg(".hook")
-HHOOK hCBTHook = NULL; 
+HHOOK hHook = NULL; 
 # pragma data_seg()
 #endif
 
@@ -100,26 +100,27 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
 }
 
 EXPORT LRESULT CALLBACK
-CBTHookProc(
-            int nCode,
-            WPARAM wp,
-            LPARAM lp
-           )
+HookProc(
+         int nCode,
+         WPARAM wp,
+         LPARAM lp
+        )
 /*
  * The hook procedure for CBT actions
  */
 { 
-    switch (nCode)
-    {
-    case HCBT_ACTIVATE:
-    case HCBT_QS:
-        HaisyoniseWindow((HWND)wp, (LONG)NULL);
-        break;
-    default:
-        break;
+    CWPRETSTRUCT *msg;
+
+    msg = (CWPRETSTRUCT *)lp;
+    switch (msg->message) {
+        case WM_ACTIVATE:
+        case WM_CREATE:
+            HaisyoniseWindow((HWND)msg->hwnd, (LONG)NULL);
+        default:
+            break;
     }
 
-    return CallNextHookEx(hCBTHook, nCode, wp, lp); 
+    return CallNextHookEx(hHook, nCode, wp, lp); 
 }
 
 
@@ -163,10 +164,10 @@ SetHaisyoHook(void)
     }
 
     /* set hook */
-    hCBTHook = SetWindowsHookEx(WH_CBT, 
-                                CBTHookProc, 
-                                hInst, 
-                                (ULONG)NULL);
+    hHook = SetWindowsHookEx(WH_CALLWNDPROCRET,
+                             HookProc, 
+                             hInst, 
+                             (ULONG)NULL);
     is_hooking = TRUE; 
     return TRUE;
 } 
@@ -180,10 +181,10 @@ UnsetHaisyoHook(void)
     /* reset hook */
     if (is_hooking)
     {
-        (BOOL) UnhookWindowsHookEx(hCBTHook);
+        (BOOL) UnhookWindowsHookEx(hHook);
     }
 
-    hCBTHook = NULL;
+    hHook = NULL;
     is_hooking = FALSE;     
     return TRUE;
 } 
