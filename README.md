@@ -25,8 +25,9 @@ GNU GENERAL PUBLIC LICENSE Version 3
 ------------
 
 MinGWでビルドしました。
-[haisyo-latest.zip](http://zuse.jp/misc/haisyo-latest.zip)
-[haisyo-latest.tar.gz](http://zuse.jp/misc/haisyo-latest.zip)
+
+- [haisyo-latest.zip](http://zuse.jp/misc/haisyo-latest.zip)
+- [haisyo-latest.tar.gz](http://zuse.jp/misc/haisyo-latest.tar.gz)
 
 
 ビルド方法
