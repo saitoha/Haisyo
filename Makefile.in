@@ -42,9 +42,6 @@ clean:
 	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.tar.gz *.@OBJEXT@ *@EXEEXT@
 	$(RM) -r $(PACKAGE) 
 
-upload: $(ARCHIVE)
-	scp $< zuse:/var/www/misc/
-
 c.@OBJEXT@: Makefile 
 	$(CC) -c $< -o $@
 
@@ -67,6 +64,10 @@ dist: clean build
 	$(CP) *.mk Makefile.in configure config.h.in $(PACKAGE)/src/
 	$(TAR) cz $(PACKAGE) > $(PACKAGE).tar.gz
 	test -n "$(ZIP)" && $(ZIP) -r $(PACKAGE).zip $(PACKAGE)
+
+upload: dist
+	scp $(PACKAGE).tar.gz zuse:/var/www/misc/@PACKAGE_NAME@-latest.tar.gz
+	scp $(PACKAGE).zip zuse:/var/www/misc/@PACKAGE_NAME@-latest.zip
 
 configure: configure.ac
 	autoconf
