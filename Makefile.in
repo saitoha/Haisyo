@@ -19,6 +19,7 @@
 CC=@CC@ -O2 -Wall -mwindows
 RC=@RC@
 ZIP=@ZIP@
+TAR=@TAR@
 CP=cp
 RM=rm -f
 MKDIR=mkdir -p
@@ -26,7 +27,7 @@ MKDIR=mkdir -p
 TARGET=haisyo
 LIBS=-luser32 -lgdi32 -lole32 -lshell32 -luuid
 PACKAGE=@PACKAGE_NAME@-@PACKAGE_VERSION@
-ZIPFILE=$(PACKAGE).zip
+ARCHIVE=$(PACKAGE).tar.gz
 
 .PHONY: all build run dist clean upload
 
@@ -37,13 +38,11 @@ build: $(TARGET)@EXEEXT@ hook.dll
 run: build
 	cygstart ./$(TARGET)@EXEEXT@
 
-dist: clean $(ZIPFILE)
-
 clean:
-	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.@OBJEXT@ *@EXEEXT@
+	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.tar.gz *.@OBJEXT@ *@EXEEXT@
 	$(RM) -r $(PACKAGE) 
 
-upload: $(ZIPFILE)
+upload: $(ARCHIVE)
 	scp $< zuse:/var/www/misc/
 
 c.@OBJEXT@: Makefile 
@@ -58,7 +57,7 @@ $(TARGET).res.@OBJEXT@: $(TARGET).rc
 $(TARGET)@EXEEXT@: main.@OBJEXT@ hook.dll $(TARGET).res.@OBJEXT@
 	$(CC) -o $@ $^ $(LIBS)
 
-$(ZIPFILE): build
+dist: clean build
 	$(RM) $@
 	$(RM) -r $(PACKAGE)
 	$(MKDIR) $(PACKAGE)/src
@@ -66,7 +65,8 @@ $(ZIPFILE): build
 	$(CP) *@EXEEXT@ *.dll $(PACKAGE)
 	$(CP) *.c *.h *.rc *.def *.ico *.bmp $(PACKAGE)/src
 	$(CP) *.mk Makefile.in configure config.h.in $(PACKAGE)/src/
-	$(ZIP) -r $@ $(PACKAGE)
+	$(TAR) cz $(PACKAGE) > $(PACKAGE).tar.gz
+	test -n "$(ZIP)" && $(ZIP) -r $(PACKAGE).zip $(PACKAGE)
 
 configure: configure.ac
 	autoconf

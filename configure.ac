@@ -20,7 +20,8 @@ AC_PROG_CC([i686-pc-mingw32-gcc \
             i686-w64-mingw32-gcc \
             i586-w64-mingw32-gcc \
             i486-w64-mingw32-gcc \
-            i386-w64-mingw32-gcc])
+            i386-w64-mingw32-gcc \
+            mingw32-gcc])
 
 # Checks for mingw resource compiler.
 AC_CHECK_PROGS([RC],
@@ -35,15 +36,17 @@ AC_CHECK_PROGS([RC],
                i686-w64-mingw32-windres \
                i586-w64-mingw32-windres \
                i486-w64-mingw32-windres \
-               i386-w64-mingw32-windres])
+               i386-w64-mingw32-windres \
+               mingw32-windres])
 if test -z "${RC}"; then
     AC_MSG_ERROR(windres command is not found.);
 fi
 
 AC_CHECK_PROG(ZIP, zip, zip)
-if test -z "${ZIP}"; then
-    AC_MSG_ERROR(zip is not found.);
-fi
+AC_CHECK_PROG(TAR, tar, tar)
+#if test -z "${ZIP}"; then
+#    AC_MSG_ERROR(zip is not found.);
+#fi
 
 # Checks for libraries.
 AC_CHECK_LIB([gdi32], [main], [], AC_MSG_ERROR([gdi32 is missing]))

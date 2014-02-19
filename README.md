@@ -40,7 +40,8 @@ MinGWでビルドしました。
 $ sudo apt-get install build-dep mingw-w64
 ```
 
-  MacやCygwinでもコンパイルできます。
+  Mac/Cygwin/MSYS環境でもビルドできると思います。
+  できなかったらissueをたててください。
 
 
 * ./configure します。
