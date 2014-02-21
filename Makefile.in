@@ -40,7 +40,8 @@ run: build
 	cygstart ./$(TARGET)@EXEEXT@
 
 clean:
-	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.tar.gz *.@OBJEXT@ *@EXEEXT@
+	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log
+	$(RM) *.zip *.tar.gz *.@OBJEXT@ *@EXEEXT@
 	$(RM) -r $(PACKAGE) 
 
 distclean: clean
@@ -50,13 +51,13 @@ c.@OBJEXT@: Makefile
 	$(CC) $(CFLAGS) -c $< -o $@
 
 haisyo.dll: haisyo.@OBJEXT@
-	$(CC) $(CFLAGS) -shared -mwindows -o $@ $< $(LIBS)
+	$(CC) $(CFLAGS) -shared -o $@ $< $(LIBS)
 
 $(TARGET).res.@OBJEXT@: $(TARGET).rc
 	$(RC) $< -o $@
 
 $(TARGET)@EXEEXT@: main.@OBJEXT@ haisyo.dll $(TARGET).res.@OBJEXT@
-	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+	$(CC) -mwindows $(CFLAGS) -o $@ $^ $(LIBS)
 
 dist: clean build
 	$(RM) $@

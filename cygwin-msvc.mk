@@ -22,26 +22,26 @@ PATH := $(VCBIN):$(SDKBIN):$(IDEPATH):$(PATH)
 
 all: $(TARGET).exe
 
-hook.dll: hook.c
+haisyo.dll: haisyo.c
 	$(CC) $(CFLAGS) \
-		/LD hook.c \
+		/LD haisyo.c \
 		/link $(LDFLAGS) $(LIBS) \
-		/DEF:hook.def \
+		/DEF:haisyo.def \
 		/OUT:$@
 	
 
 $(TARGET).res: $(TARGET).rc
 	$(RC) $<
 
-$(TARGET).exe: main.c hook.dll $(TARGET).res
+$(TARGET).exe: main.c haisyo.dll $(TARGET).res
 	$(CC) $(CFLAGS) main.c \
-		/link $(LDFLAGS) $(LIBS) $(TARGET).res hook.lib \
+		/link $(LDFLAGS) $(LIBS) $(TARGET).res haisyo.lib \
 		/OUT:$@
 
 dist: $(TARGET).exe
 	$(RM) -r bin
 	mkdir bin
-	$(CP) $(TARGET).exe hook.dll bin/
+	$(CP) $(TARGET).exe haisyo.dll bin/
 	$(RM) -r src
 	mkdir src
 	$(CP) *.c *.h *.rc *.def *.ico *.bmp Makefile src/
@@ -51,3 +51,4 @@ dist: $(TARGET).exe
 clean:
 	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o
 	$(RM) -r src bin
+

@@ -102,7 +102,7 @@ end:
     {
         spShellLink->lpVtbl->Release(spShellLink);
     }
-    return hr
+    return hr;
 }
 
 
@@ -316,11 +316,9 @@ EmergeLButtonMenu(HWND  hwnd,   /* parent window handle */
 }
 
 EXPORT HFONT 
-SetMyFont(LPCTSTR face, /* font face */
-          INT height)   /* font height */
+SetMenuFont(LPCTSTR face, /* font face */
+            INT height)   /* font height */
 /*
-CreateFont?????b?p?[
-?LWin????
 http://www.kumei.ne.jp/c_lang/sdk/sdk_46.htm
 */
 { 
@@ -351,9 +349,9 @@ HSSetMenuInfo(HWND                hwnd,   /* parent window handle */
  * create and initialize a new menu
  */
 {
-    HDC   hdc  = GetDC(hwnd);     
-    SIZE  sz; 
-    HFONT hFont = SetMyFont("MS Gothic", 14);
+    HDC hdc = GetDC(hwnd);     
+    SIZE sz; 
+    HFONT hFont = SetMenuFont("MS Gothic", 14);
     HFONT hFontOld = (HFONT)SelectObject(hdc, hFont);
 
     GetTextExtentPoint32(hdc,
@@ -375,9 +373,8 @@ DrawVerticalBar(LPDRAWITEMSTRUCT  lpDI,
 
     for (i = 0; i < prcbar->right; i++)
     {
-        HPEN hPen = CreatePen(PS_SOLID,
-                              1, 
-                              RGB(255, 255 - i * 3, 255 - i * 5));
+        COLORREF color = RGB(255, 255 - i * 3, 255 - i * 5);
+        HPEN hPen = CreatePen(PS_SOLID, 1, color);
         HPEN hOldPen   = SelectObject(lpDI->hDC, hPen); 
         MoveToEx(lpDI->hDC, i, prcbar->top, NULL);
         LineTo(lpDI->hDC, i, prcbar->bottom);
@@ -457,10 +454,10 @@ DrawMenuText(LPDRAWITEMSTRUCT lpDI,
              LONG             marginleft,
              LONG             margintop)
 {
-    INT       oldBkMode;
-    COLORREF  oldTextColor = 0;
-    HFONT     hFont    = SetMyFont(fontface, fontsize);
-    HFONT     hFontOld = (HFONT)SelectObject(lpDI->hDC, hFont);
+    INT oldBkMode;
+    COLORREF oldTextColor = 0;
+    HFONT hFont = SetMenuFont(fontface, fontsize);
+    HFONT hFontOld = (HFONT)SelectObject(lpDI->hDC, hFont);
 
     if ((lpDI->itemState  & ODS_SELECTED) && 
         (lpDI->itemAction & (ODA_SELECT | ODA_DRAWENTIRE))) 
@@ -578,9 +575,8 @@ InitInstance(HINSTANCE hInst,
     nIcon.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
     nIcon.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_HAISYO));
     nIcon.uCallbackMessage = WM_TRYCLK;
-    Shell_NotifyIcon(NIM_ADD, &nIcon);
-    
-    return TRUE; 
+
+    return Shell_NotifyIcon(NIM_ADD, &nIcon);
 }
  
 LRESULT CALLBACK 
@@ -596,7 +592,7 @@ WndProc(HWND hWnd,
 
     enum { MENU_STARTUP, MENU_END };
     LPCTSTR str[] = { IDS_CONFIG, IDS_CANCEL };
-    UINT    itemID[] = { IDB_CONFIG, IDB_CANCEL };
+    UINT itemID[] = { IDB_CONFIG, IDB_CANCEL };
 
     switch (msg) 
     { 
@@ -707,10 +703,10 @@ ATOM InitApp(HINSTANCE hInst)
     wc.lpszClassName = (LPCSTR)IDS_CLASS; 
     wc.hIconSm = LoadIcon(hInst, MAKEINTRESOURCE(IDI_HAISYO)); 
 
-    return (RegisterClassEx(&wc)); 
+    return RegisterClassEx(&wc); 
 }
 
-INT __stdcall
+INT WINAPI
 WinMain(HINSTANCE hCurInst, 
         HINSTANCE hPrevInst, 
         LPSTR     lpsCmdLine, 

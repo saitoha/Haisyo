@@ -26,16 +26,16 @@ TARGET=haisyo
 
 all: $(TARGET).exe
 
-hook.dll: hook.lib
+haisyo.dll: haisyo.lib
 
-hook.lib: hook.c hook.def
-	$(CC) /LD hook.c /link $(LIBS) /DEF:hook.def /OUT:hook.dll
+haisyo.lib: haisyo.c haisyo.def
+	$(CC) /LD haisyo.c /link $(LIBS) /DEF:haisyo.def /OUT:haisyo.dll
 
 haisyo.RES: haisyo.rc
 	$(RC) $?
 
-haisyo.exe: hook.dll haisyo.RES
-	$(CC) main.c /link $(LIBS) /MACHINE:x86 haisyo.RES hook.lib /OUT:$@
+haisyo.exe: haisyo.dll haisyo.RES
+	$(CC) main.c /link $(LIBS) /MACHINE:x86 haisyo.RES haisyo.lib /OUT:$@
 
 clean:
 	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.o
