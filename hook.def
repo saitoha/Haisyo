@@ -1,7 +1,0 @@
-
-LIBRARY   hook
-
-SECTIONS
-	.hook	READ WRITE SHARED
-
-

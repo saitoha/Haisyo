@@ -26,7 +26,7 @@
 #include "config.h"
 #include <windows.h> 
 #include <shlobj.h>
-#include "hook.h"
+#include "haisyo.h"
 #include "resource.h"
 
 #if !defined(GWL_HINSTANCE)
@@ -50,45 +50,59 @@ CreateShortcut(LPSTR pszLink,
  */
 {
     HRESULT hr;
-    IShellLink *psl;
+    IShellLink *spShellLink;
+    IPersistFile *spPersistFile;
+    WORD wsz[MAX_PATH];
+
+    spShellLink = NULL;
+    spPersistFile = NULL;
 
     /* Create a object implements IShellLink */
     hr = CoCreateInstance(&CLSID_ShellLink, 
-                            NULL, 
-                            CLSCTX_INPROC_SERVER,              
-                            &IID_IShellLink,
-                            (void **)&psl);
-    if (SUCCEEDED(hr))
+                          NULL, 
+                          CLSCTX_INPROC_SERVER,              
+                          &IID_IShellLink,
+                          (void **)&spShellLink);
+    if (!SUCCEEDED(hr) || NULL == spShellLink)
     {
-        IPersistFile *ppf;
-
-        /* get IPersist */
-        hr = psl->lpVtbl->QueryInterface(psl,
-                                         &IID_IPersistFile,
-                                         (void **)&ppf);
-        if (SUCCEEDED(hr))
-        {
-            WORD wsz[MAX_PATH];
-
-            psl->lpVtbl->SetPath(psl, pszFile);
-            psl->lpVtbl->SetDescription(psl, pszDescription);
-            psl->lpVtbl->SetArguments(psl, pszArgs);
-            psl->lpVtbl->SetWorkingDirectory(psl, pszWorkingDir);
-            psl->lpVtbl->SetIconLocation(psl, pszIconPath, iIcon);
-            psl->lpVtbl->SetShowCmd(psl, iShowCmd);
-
-            MultiByteToWideChar(CP_ACP, 0, pszLink, -1, wsz, MAX_PATH);
-
-            /* persist to a file */
-            hr = ppf->lpVtbl->Save(ppf, wsz, TRUE);
-
-            /* release IPersistFile */
-            ppf->lpVtbl->Release(ppf);
-        }
-        /* release IShellLink */
-        psl->lpVtbl->Release(psl);
+        goto end;
     }
-    return hr;
+
+    /* get IPersist */
+    hr = spShellLink->lpVtbl->QueryInterface(spShellLink,
+                                             &IID_IPersistFile,
+                                             (void **)&spPersistFile);
+    if (!SUCCEEDED(hr) || NULL == spPersistFile)
+    {
+        goto end;
+    }
+
+    spShellLink->lpVtbl->SetPath(spShellLink, pszFile);
+    spShellLink->lpVtbl->SetDescription(spShellLink, pszDescription);
+    spShellLink->lpVtbl->SetArguments(spShellLink, pszArgs);
+    spShellLink->lpVtbl->SetWorkingDirectory(spShellLink, pszWorkingDir);
+    spShellLink->lpVtbl->SetIconLocation(spShellLink, pszIconPath, iIcon);
+    spShellLink->lpVtbl->SetShowCmd(spShellLink, iShowCmd);
+
+    if (!MultiByteToWideChar(CP_ACP, 0, pszLink, -1, wsz, MAX_PATH))
+    {
+        hr = E_UNEXPECTED;
+        goto end;
+    }
+
+    /* persist to a file */
+    hr = spPersistFile->lpVtbl->Save(spPersistFile, wsz, TRUE);
+
+end:
+    if (spPersistFile)
+    {
+        spPersistFile->lpVtbl->Release(spPersistFile);
+    }
+    if (spShellLink)
+    {
+        spShellLink->lpVtbl->Release(spShellLink);
+    }
+    return hr
 }
 
 
@@ -154,6 +168,7 @@ ResisterStartUp(HWND    hDlg,
                        0);
         CoUninitialize();
     }
+
     return TRUE;
 }
 

@@ -16,14 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # ##### END GPL LICENSE BLOCK #####
 
-CC=@CC@ -O2 -Wall -mwindows
-RC=@RC@
+CC=@CC@
+RC=@RC@ -O coff
 ZIP=@ZIP@
 TAR=@TAR@
 CP=cp
 RM=rm -f
 MKDIR=mkdir -p
 
+CFLAGS=-O2 -Wall -fno-strict-aliasing
 TARGET=haisyo
 LIBS=-luser32 -lgdi32 -lole32 -lshell32 -luuid
 PACKAGE=@PACKAGE_NAME@-@PACKAGE_VERSION@
@@ -33,7 +34,7 @@ ARCHIVE=$(PACKAGE).tar.gz
 
 all: build
 
-build: $(TARGET)@EXEEXT@ hook.dll
+build: $(TARGET)@EXEEXT@ haisyo.dll
 
 run: build
 	cygstart ./$(TARGET)@EXEEXT@
@@ -42,17 +43,20 @@ clean:
 	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log *.zip *.tar.gz *.@OBJEXT@ *@EXEEXT@
 	$(RM) -r $(PACKAGE) 
 
-c.@OBJEXT@: Makefile 
-	$(CC) -c $< -o $@
+distclean: clean
+	$(RM) -r autom4te.cache config.status Makefile
 
-hook.dll: hook.@OBJEXT@
-	$(CC) -shared -o $@ $< $(LIBS)
+c.@OBJEXT@: Makefile 
+	$(CC) $(CFLAGS) -c $< -o $@
+
+haisyo.dll: haisyo.@OBJEXT@
+	$(CC) $(CFLAGS) -shared -mwindows -o $@ $< $(LIBS)
 
 $(TARGET).res.@OBJEXT@: $(TARGET).rc
-	$(RC) $< $@
+	$(RC) $< -o $@
 
-$(TARGET)@EXEEXT@: main.@OBJEXT@ hook.dll $(TARGET).res.@OBJEXT@
-	$(CC) -o $@ $^ $(LIBS)
+$(TARGET)@EXEEXT@: main.@OBJEXT@ haisyo.dll $(TARGET).res.@OBJEXT@
+	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 dist: clean build
 	$(RM) $@
@@ -74,4 +78,5 @@ configure: configure.ac
 
 Makefile: Makefile.in configure
 	./configure
+
 
