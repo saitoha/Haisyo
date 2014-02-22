@@ -1,0 +1,7 @@
+
+LIBRARY   haisyo
+
+SECTIONS
+	.haisyo	READ WRITE SHARED
+
+
