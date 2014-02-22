@@ -28,7 +28,6 @@
 
 #include "config.h"
 #include <windows.h>
-#include <shlwapi.h>
 #include "haisyo.h"
 #include "resource.h"
 

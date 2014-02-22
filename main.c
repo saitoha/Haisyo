@@ -25,7 +25,6 @@
 
 #include "config.h"
 #include <windows.h> 
-#include <shlobj.h>
 #include "haisyo.h"
 #include "resource.h"
 

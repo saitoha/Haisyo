@@ -42,7 +42,7 @@ run: build
 clean:
 	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log
 	$(RM) *.zip *.tar.gz *.@OBJEXT@ *@EXEEXT@
-	$(RM) -r $(PACKAGE) 
+	$(RM) -r @PACKAGE_NAME@-*
 
 distclean: clean
 	$(RM) -r autom4te.cache config.status Makefile
@@ -73,11 +73,11 @@ dist: clean build
 upload: dist
 	scp $(PACKAGE).tar.gz zuse:/var/www/misc/@PACKAGE_NAME@-latest.tar.gz
 	scp $(PACKAGE).zip zuse:/var/www/misc/@PACKAGE_NAME@-latest.zip
+	scp haisyo.dll haisyo.exe zuse:/var/www/misc/
 
 configure: configure.ac
 	autoconf
 
 Makefile: Makefile.in configure
 	./configure
-
 
