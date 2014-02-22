@@ -35,77 +35,6 @@
 
 HANDLE g_hMutex;
 
-HRESULT 
-CreateShortcut(LPSTR pszLink,
-               LPSTR pszFile,
-               LPSTR pszDescription,
-               LPSTR pszArgs,
-               LPSTR pszWorkingDir,
-               LPSTR pszIconPath,
-               INT iIcon,
-               INT iShowCmd)
-/*
- * Create shortcut
- *  ref: http://techtips.belution.com/ja/vc/0030/
- */
-{
-    HRESULT hr;
-    IShellLink *spShellLink;
-    IPersistFile *spPersistFile;
-    WORD wsz[MAX_PATH];
-
-    spShellLink = NULL;
-    spPersistFile = NULL;
-
-    /* Create a object implements IShellLink */
-    hr = CoCreateInstance(&CLSID_ShellLink, 
-                          NULL, 
-                          CLSCTX_INPROC_SERVER,              
-                          &IID_IShellLink,
-                          (void **)&spShellLink);
-    if (!SUCCEEDED(hr) || NULL == spShellLink)
-    {
-        goto end;
-    }
-
-    /* get IPersist */
-    hr = spShellLink->lpVtbl->QueryInterface(spShellLink,
-                                             &IID_IPersistFile,
-                                             (void **)&spPersistFile);
-    if (!SUCCEEDED(hr) || NULL == spPersistFile)
-    {
-        goto end;
-    }
-
-    spShellLink->lpVtbl->SetPath(spShellLink, pszFile);
-    spShellLink->lpVtbl->SetDescription(spShellLink, pszDescription);
-    spShellLink->lpVtbl->SetArguments(spShellLink, pszArgs);
-    spShellLink->lpVtbl->SetWorkingDirectory(spShellLink, pszWorkingDir);
-    spShellLink->lpVtbl->SetIconLocation(spShellLink, pszIconPath, iIcon);
-    spShellLink->lpVtbl->SetShowCmd(spShellLink, iShowCmd);
-
-    if (!MultiByteToWideChar(CP_ACP, 0, pszLink, -1, wsz, MAX_PATH))
-    {
-        hr = E_UNEXPECTED;
-        goto end;
-    }
-
-    /* persist to a file */
-    hr = spPersistFile->lpVtbl->Save(spPersistFile, wsz, TRUE);
-
-end:
-    if (spPersistFile)
-    {
-        spPersistFile->lpVtbl->Release(spPersistFile);
-    }
-    if (spShellLink)
-    {
-        spShellLink->lpVtbl->Release(spShellLink);
-    }
-    return hr;
-}
-
-
 BOOL
 ResisterStartUp(HWND    hDlg,
                 LPSTR   pszFile,
@@ -116,58 +45,29 @@ ResisterStartUp(HWND    hDlg,
  * ref: http://techtips.belution.com/ja/vc/0030/
  */
 {
-#if defined(HAVE_SHGETFOLDERPATH)
-    HRESULT hr = E_FAIL;
-#elif defined(HAVE_SHGETSPECIALFOLDERPATH)
-    BOOL bRet = FALSE;
-#endif
     DWORD dwRet = 0;
-    TCHAR szModulePath[_MAX_PATH];
-    TCHAR szSysPath[_MAX_PATH];
+    CHAR szModulePath[_MAX_PATH];
+    HKEY hKey;
 
     /* get full-path for current module */
-    dwRet = GetModuleFileName(NULL, szModulePath, sizeof(szModulePath));
+    dwRet = GetModuleFileNameA(NULL, szModulePath, sizeof(szModulePath));
     if (dwRet == 0)
     {
         return FALSE;
     }
 
-    /* get the absolute path of startup directory */
-#if defined(_MSC_VER) || defined(HAVE_SHGETFOLDERPATH)
-    hr = SHGetFolderPath(NULL, CSIDL_COMMON_STARTUP, NULL,
-                         0 /* SHGFP_TYPE_CURRENT */, szSysPath);
-    /* note that hr may be S_FALSE (CSIDL is valid but the folder is not found) */
-    if (!SUCCEEDED(hr))
-    {
-        return FALSE;
-    }
-#elif defined(HAVE_SHGETSPECIALFOLDERPATH)
-    bRet = SHGetSpecialFolderPath(hDlg, szSysPath, CSIDL_STARTUP, TRUE);
-    if (!bRet)
-    {
-        return FALSE;
-    }
-#else
-    /* TODO: try to do dynamic import using LoadLibrary */
-#endif
-
-    /* build the absolute path of target shortcut file
-     * (don't use PathCombine for compatibility) */
-    strcat(szSysPath, pszFile);
-
-    /* create shortcut file */
-    if (SUCCEEDED(CoInitialize(NULL)))
-    {
-        CreateShortcut(szSysPath,
-                       szModulePath,
-                       pszFile, 
-                       pszDescription, 
-                       NULL,
-                       pszIconPath,
-                       0,
-                       0);
-        CoUninitialize();
-    }
+    RegOpenKeyExA(HKEY_CURRENT_USER,
+                  "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                  0, /* reserved */
+                  KEY_SET_VALUE,
+                  &hKey);
+    RegSetValueExA(hKey,
+                   "haisyo.exe",
+                   0, /* reserved */
+                   REG_SZ,
+                   (const unsigned char*)szModulePath,
+                   strlen(szModulePath));
+    RegCloseKey(hKey);
 
     return TRUE;
 }
