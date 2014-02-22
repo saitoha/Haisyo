@@ -44,16 +44,6 @@ fi
 
 AC_CHECK_PROG(ZIP, zip, zip)
 AC_CHECK_PROG(TAR, tar, tar)
-#if test -z "${ZIP}"; then
-#    AC_MSG_ERROR(zip is not found.);
-#fi
-
-# Checks for libraries.
-AC_CHECK_LIB([gdi32], [main], [], AC_MSG_ERROR([gdi32 is missing]))
-AC_CHECK_LIB([ole32], [main], [], AC_MSG_ERROR([ole32 is missing]))
-AC_CHECK_LIB([shell32], [main], [], AC_MSG_ERROR([shell32 is missing]))
-AC_CHECK_LIB([user32], [main], [], AC_MSG_ERROR([user32 is missing]))
-AC_CHECK_LIB([uuid], [main], [], AC_MSG_ERROR([uuid is missing]))
 
 # Checks for header files.
 AC_CHECK_HEADERS([windows.h],
@@ -65,7 +55,7 @@ AC_CHECK_DECLS([lstrlen],
                [AC_DEFINE(HAVE_SHGETFOLDERPATH)],
                [AC_MSG_ERROR([oops! lstrlen is missing.])],
                [
-                #include <shlwapi.h>
+                #include <windows.h>
                ])
 AC_CHECK_DECLS([DSTERASE],
                [AC_DEFINE(HAVE_DSTERASE)],
@@ -74,7 +64,7 @@ AC_CHECK_DECLS([DSTERASE],
                 #include <windows.h>
                ])
 # Checks for library functions.
-AC_CHECK_FUNCS([strstr strcat strcmp memcpy], [], [AC_MSG_ERROR([omg!])])
+AC_CHECK_FUNCS([strstr strcmp memcpy], [], [AC_MSG_ERROR([omg!])])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
