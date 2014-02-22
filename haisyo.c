@@ -49,8 +49,20 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
 {
     CHAR buffer[4096];
     CHAR *p = NULL;
-    CHAR *orig_words[] = { IDS_SHIMASU1, IDS_DEKIMASU1, IDS_ARIMASU1 };
-    CHAR *new_words[] = { IDS_SHIMASU2, IDS_DEKIMASU2, IDS_ARIMASU2 };
+    CHAR *orig_words[] = {
+        IDS_KUDASAI1,
+        IDS_SHIMASUKA1,
+        IDS_SHIMASU1,
+        IDS_DEKIMASU1,
+        IDS_ARIMASU1
+    };
+    CHAR *new_words[] = {
+        IDS_KUDASAI2,
+        IDS_SHIMASUKA2,
+        IDS_SHIMASU2,
+        IDS_DEKIMASU2,
+        IDS_ARIMASU2
+    };
     UINT i;
     INT origlen, newlen, postlen;
 
@@ -79,13 +91,7 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
         {
             if (GetWindowText(hwnd, buffer, sizeof(buffer) - 32))
             {
-                p = strstr(buffer, IDS_KUDASAI);
-                if (p) 
-                {
-                    memcpy(p, IDS_ITADAKITAKU, sizeof(IDS_KUDASAI));
-                }
-
-                for (i = 0; i < 3; i++)
+                for (i = 0; i < sizeof(orig_words) / sizeof(*orig_words); i++)
                 {
                     p = strstr(buffer, orig_words[i]);
                     if (p) 

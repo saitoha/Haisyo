@@ -33,12 +33,14 @@
 
 #define IDS_OK                          "OK"
 #define IDS_YES                         "ÇÕÇ¢"
-#define IDS_KUDASAI                     "Ç≠ÇæÇ≥Ç¢"
-#define IDS_ITADAKITAKU                 "í∏Ç´ÇΩÇ≠"
+#define IDS_KUDASAI1                    "Ç≠ÇæÇ≥Ç¢"
+#define IDS_KUDASAI2                    "í∏Ç´ÇΩÇ≠"
+#define IDS_SHIMASUKA1                  "ÇµÇ‹Ç∑Ç©?"
+#define IDS_SHIMASUKA2                  "Ç≥ÇπÇƒí∏Ç´ÇΩÇ≠"
 #define IDS_SHIMASU1                    "ÇµÇ‹Ç∑"
 #define IDS_SHIMASU2                    "Ç≥ÇπÇƒí∏Ç´ÇΩÇ≠"
 #define IDS_DEKIMASU1                   "Ç≈Ç´Ç‹Ç∑"
-#define IDS_DEKIMASU2                   "Ç≈Ç´ÇÈé|"
+#define IDS_DEKIMASU2                   "Ç≈Ç´ÇÈé|Ç≤è≥ímí∏Ç´ÇΩÇ≠"
 #define IDS_ARIMASU1                    "Ç†ÇËÇ‹Ç∑"
 #define IDS_ARIMASU2                    "Ç†ÇÈé|Ç≤è≥ímí∏Ç´ÇΩÇ≠"
 
