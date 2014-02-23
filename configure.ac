@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.59])
-AC_INIT([haisyo], [1.1.0], [user@zuse.jp])
+AC_INIT([haisyo], [1.2.0], [user@zuse.jp])
 AC_CONFIG_SRCDIR([main.c])
 AC_CONFIG_HEADERS([config.h])
 
