@@ -29,7 +29,7 @@
 #define IDS_UNREGISTERED                "自動起動を解除しました。"
 #define IDS_REGISTER_TITLE              "自動起動"
 #define IDS_HAISYO                      "拝承"
-#define IDS_REGISTER                    "ログオン時に起動する"
+#define IDS_REGISTER                    "ログオン時に起動する　"
 #define IDS_UNREGISTER                  "ログオン時に起動しない"
 #define IDS_CANCEL                      "終了"
 #define IDS_CLASS                       "HAISYO"
