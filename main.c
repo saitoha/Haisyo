@@ -35,16 +35,10 @@
 HANDLE g_hMutex;
 
 BOOL
-ResisterStartUp(HWND    hDlg,
-                LPSTR   pszFile,
-                LPSTR   pszDescription,
-                LPSTR   pszIconPath)
-/*
- * Register shortcut to startup directory
- * ref: http://techtips.belution.com/ja/vc/0030/
- */
+ResisterStartUp()
 {
     DWORD dwRet = 0;
+    LONG ret;
     CHAR szModulePath[_MAX_PATH];
     HKEY hKey;
 
@@ -55,19 +49,91 @@ ResisterStartUp(HWND    hDlg,
         return FALSE;
     }
 
-    RegOpenKeyExA(HKEY_CURRENT_USER,
-                  "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-                  0, /* reserved */
-                  KEY_SET_VALUE,
-                  &hKey);
-    RegSetValueExA(hKey,
-                   "haisyo.exe",
-                   0, /* reserved */
-                   REG_SZ,
-                   (const unsigned char*)szModulePath,
-                   strlen(szModulePath));
+    ret = RegOpenKeyExA(HKEY_CURRENT_USER,
+                        "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        0, /* reserved */
+                        KEY_SET_VALUE,
+                        &hKey);
+
+    if (ret != ERROR_SUCCESS) {
+        MessageBox(NULL, "#-", IDS_REGISTER_TITLE, MB_OK);
+        return FALSE;
+    }
+
+    ret = RegSetValueExA(hKey,
+                         "haisyo.exe",
+                         0, /* reserved */
+                         REG_SZ,
+                         (const unsigned char*)szModulePath,
+                         strlen(szModulePath));
     RegCloseKey(hKey);
 
+    if (ret != ERROR_SUCCESS) {
+        MessageBox(NULL, "-", IDS_REGISTER_TITLE, MB_OK);
+        return FALSE;
+    }
+
+    MessageBox(NULL, IDS_REGISTERED, IDS_REGISTER_TITLE, MB_OK);
+
+    return TRUE;
+}
+
+BOOL
+UnresisterStartUp()
+{
+    HKEY hKey;
+    LONG ret;
+
+    ret = RegOpenKeyExA(HKEY_CURRENT_USER,
+                        "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        0, /* reserved */
+                        KEY_ALL_ACCESS,
+                        &hKey);
+
+    if (ret != ERROR_SUCCESS) {
+        return FALSE;
+    }
+
+    ret = RegDeleteValue(hKey, "haisyo.exe");
+
+    RegCloseKey(hKey);
+
+    if (ret != ERROR_SUCCESS) {
+        return FALSE;
+    }
+
+    MessageBox(NULL, IDS_UNREGISTERED, IDS_REGISTER_TITLE, MB_OK);
+
+    return TRUE;
+}
+ 
+LONG IsRegistered()
+{
+    LONG ret;
+    HKEY hKey;
+
+    ret = RegOpenKeyExA(HKEY_CURRENT_USER,
+                        "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        0, /* reserved */
+                        KEY_QUERY_VALUE,
+                        &hKey);
+
+    if (ret != ERROR_SUCCESS) {
+            MessageBox(0,"1",0,0);
+        return FALSE;
+    }
+
+    ret = RegQueryValueExA(hKey,
+                           "haisyo.exe",
+                           0, /* reserved */
+                           NULL,
+                           NULL,
+                           0);
+    RegCloseKey(hKey);
+
+    if (ret != ERROR_SUCCESS) {
+        return FALSE;
+    }
     return TRUE;
 }
 
@@ -299,21 +365,19 @@ DrawOfficeMenuBack(LPDRAWITEMSTRUCT  lpDI,
     }
 
     /* draw vertical gradation bar */
-    SetRect(
-        &rcbar,
-        lpDI->rcItem.left, 
-        lpDI->rcItem.top,
-        lpDI->rcItem.left + barspan,
-        lpDI->rcItem.bottom);
+    SetRect(&rcbar,
+            lpDI->rcItem.left, 
+            lpDI->rcItem.top,
+            lpDI->rcItem.left + barspan,
+            lpDI->rcItem.bottom);
     DrawVerticalBar(lpDI, &rcbar);
 
     /* draw the other region */
-    SetRect(
-        &rcback,
-        rcbar.right, 
-        lpDI->rcItem.top,
-        lpDI->rcItem.right,
-        lpDI->rcItem.bottom);
+    SetRect(&rcback,
+            rcbar.right, 
+            lpDI->rcItem.top,
+            lpDI->rcItem.right,
+            lpDI->rcItem.bottom);
     FillRect(lpDI->hDC, &rcback, WHITE_BRUSH);
     return TRUE;
 }
@@ -385,10 +449,10 @@ DrawMenuText(LPDRAWITEMSTRUCT lpDI,
 }
 
 void 
-RotateBlt(HINSTANCE hInst,
-          HDC     hdc,
-          PRECT   prc,
-          UINT    iconID)
+DrawMenuIcon(HINSTANCE hInst,
+             HDC     hdc,
+             PRECT   prc,
+             UINT    iconID)
 {
     BITMAP  bm;
     HBITMAP hBmp;
@@ -412,11 +476,12 @@ RotateBlt(HINSTANCE hInst,
 }
 
 void
-DrawMyMenu(
-           HWND              hwnd,
-           LPDRAWITEMSTRUCT  lpDI, 
-           LPCTSTR           str,
-           UINT              iconID)
+DrawMenu(
+         HWND              hwnd,
+         LPDRAWITEMSTRUCT  lpDI, 
+         LPCTSTR           str,
+         UINT              iconID
+        )
 {    
     HINSTANCE hInst = (HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE);
 
@@ -434,10 +499,10 @@ DrawMyMenu(
                  8);
 
     /* draw icon image */
-    RotateBlt(hInst,
-              lpDI->hDC,
-              &lpDI->rcItem,
-              iconID);
+    DrawMenuIcon(hInst,
+                 lpDI->hDC,
+                 &lpDI->rcItem,
+                 iconID);
 }
 
  
@@ -488,10 +553,9 @@ WndProc(HWND hWnd,
  */ 
 { 
     static HMENU hmenu; 
-
-    enum { MENU_STARTUP, MENU_END };
-    LPCTSTR str[] = { IDS_CONFIG, IDS_CANCEL };
-    UINT itemID[] = { IDB_CONFIG, IDB_CANCEL };
+    enum            { MENU_REGISTER, MENU_UNREGISTER, MENU_END   };
+    LPCTSTR str[] = { IDS_REGISTER,  IDS_UNREGISTER,  IDS_CANCEL };
+    UINT itemID[] = { IDB_CONFIG,    IDB_CONFIG,      IDB_CANCEL };
 
     switch (msg) 
     { 
@@ -502,13 +566,20 @@ WndProc(HWND hWnd,
     case WM_DRAWITEM: 
         {
             LPDRAWITEMSTRUCT lpDI = (LPDRAWITEMSTRUCT)lp;
-            if (lpDI->itemID == IDM_STARTUP)
+            switch (lpDI->itemID)
             {
-                DrawMyMenu(hWnd, (LPDRAWITEMSTRUCT)lp, str[MENU_STARTUP], itemID[MENU_STARTUP]);
-            }
-            else if (lpDI->itemID == IDM_END)
-            {
-                DrawMyMenu(hWnd, (LPDRAWITEMSTRUCT)lp, str[MENU_END], itemID[MENU_END]);
+            case IDM_STARTUP:
+                if (IsRegistered()) {
+                  DrawMenu(hWnd, (LPDRAWITEMSTRUCT)lp, str[MENU_UNREGISTER], itemID[MENU_UNREGISTER]);
+                } else {
+                  DrawMenu(hWnd, (LPDRAWITEMSTRUCT)lp, str[MENU_REGISTER], itemID[MENU_REGISTER]);
+                }
+                break;
+            case IDM_END:
+                DrawMenu(hWnd, (LPDRAWITEMSTRUCT)lp, str[MENU_END], itemID[MENU_END]);
+                break;
+            default:
+                break;
             }
         }
         return TRUE;
@@ -517,7 +588,11 @@ WndProc(HWND hWnd,
         switch(wp)
         {
         case IDM_STARTUP:            
-            ResisterStartUp(hWnd, "\\" IDS_HAISYO ".lnk", "", NULL);
+            if (IsRegistered()) {
+              UnresisterStartUp(hWnd, "", NULL);
+            } else {
+              ResisterStartUp(hWnd, "", NULL);
+            }
             break;
 
         case IDM_END:
@@ -540,7 +615,8 @@ WndProc(HWND hWnd,
             AppendMenu(hmenu, 
                        MF_OWNERDRAW, 
                        IDM_STARTUP, 
-                       (LPCTSTR)MENU_STARTUP);
+                       (LPCTSTR)MENU_REGISTER);
+
             AppendMenu(hmenu, 
                        MF_OWNERDRAW, 
                        IDM_END, 
@@ -552,8 +628,9 @@ WndProc(HWND hWnd,
         /* process click event at tray icon */
         switch(lp)
         {
+        case WM_LBUTTONUP:
         case WM_RBUTTONUP:
-            /* detect right click and show popup menu */
+            /* detect click and show popup menu */
             EmergeLButtonMenu(hWnd, hmenu);
             break;
         }

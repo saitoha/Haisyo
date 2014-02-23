@@ -25,8 +25,12 @@
 #define IDM_STARTUP                     40002
 #define WM_TRYCLK                       40005
 
+#define IDS_REGISTERED                  "次回ログオン時に自動起動されます。"
+#define IDS_UNREGISTERED                "自動起動を解除しました。"
+#define IDS_REGISTER_TITLE              "自動起動"
 #define IDS_HAISYO                      "拝承"
-#define IDS_CONFIG                      "スタートアップに設定"
+#define IDS_REGISTER                    "ログオン時に起動する"
+#define IDS_UNREGISTER                  "ログオン時に起動しない"
 #define IDS_CANCEL                      "終了"
 #define IDS_CLASS                       "HAISYO"
 #define IDS_TITLE                       "HAISYO"
