@@ -14,7 +14,7 @@ Haisyo
 動作環境
 --------
 
-Windows XP sp3 と Windows 7 sp1 で動作確認しました。
+Windows 2000 sp4 と Windows XP sp3 と Windows 7 sp1 (32bit) で動作確認しました。
 
 ライセンス
 ----------
