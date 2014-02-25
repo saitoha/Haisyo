@@ -39,7 +39,7 @@
 #define IDS_YES                         "‚Í‚¢"
 #define IDS_KUDASAI1                    "‚­‚¾‚³‚¢"
 #define IDS_KUDASAI2                    "’¸‚«‚½‚­"
-#define IDS_SHIMASUKA1                  "‚µ‚Ü‚·‚©?"
+#define IDS_SHIMASUKA1                  "‚µ‚Ü‚·‚©"
 #define IDS_SHIMASUKA2                  "‚³‚¹‚Ä’¸‚«‚½‚­"
 #define IDS_SHIMASU1                    "‚µ‚Ü‚·"
 #define IDS_SHIMASU2                    "‚³‚¹‚Ä’¸‚«‚½‚­"
