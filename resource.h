@@ -48,4 +48,7 @@
 #define IDS_ARIMASU1                    "Ç†ÇËÇ‹Ç∑"
 #define IDS_ARIMASU2                    "Ç†ÇÈé|Ç≤è≥ímí∏Ç´ÇΩÇ≠"
 
+#define IDS_REGKEY_RUN                  "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+#define IDS_LOCKSTRING                  "f98c3702-c97b-4b8a-a6e8-d038a583b30b"
+
 /* EOF */

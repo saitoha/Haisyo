@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 #include "config.h"
-#include <windows.h> 
+#include <windows.h>
 #include "haisyo.h"
 #include "resource.h"
 
@@ -50,7 +50,7 @@ ResisterStartUp()
     }
 
     ret = RegOpenKeyExA(HKEY_CURRENT_USER,
-                        "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        IDS_REGKEY_RUN,
                         0, /* reserved */
                         KEY_SET_VALUE,
                         &hKey);
@@ -85,7 +85,7 @@ UnresisterStartUp()
     LONG ret;
 
     ret = RegOpenKeyExA(HKEY_CURRENT_USER,
-                        "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        IDS_REGKEY_RUN,
                         0, /* reserved */
                         KEY_ALL_ACCESS,
                         &hKey);
@@ -106,14 +106,14 @@ UnresisterStartUp()
 
     return TRUE;
 }
- 
+
 LONG IsRegistered()
 {
     LONG ret;
     HKEY hKey;
 
     ret = RegOpenKeyExA(HKEY_CURRENT_USER,
-                        "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        IDS_REGKEY_RUN,
                         0, /* reserved */
                         KEY_QUERY_VALUE,
                         &hKey);
@@ -161,18 +161,18 @@ TransparentBltEx(
     oldBkMode  = SetBkMode(hdc, TRANSPARENT);
     oldBkColor = SetBkColor(hdc, bkcolor);
 
-    hBmpDC     = CreateCompatibleDC(hdc); 
-    SelectObject(hBmpDC, hBmp); 
+    hBmpDC     = CreateCompatibleDC(hdc);
+    SelectObject(hBmpDC, hBmp);
     SetBkColor(hBmpDC, bkcolor);
     GetObject(hBmp, sizeof(BITMAP), &bm);
-    
+
     oldTextColor = SetTextColor(hdc, RGB(0, 0, 0));
 
     /* craete mask */
     hMaskDC = CreateCompatibleDC(hdc);
 
     /* create a monochrome bitmap */
-    hMaskBmp = CreateBitmap(bm.bmWidth, bm.bmHeight, 1, 1, NULL);  
+    hMaskBmp = CreateBitmap(bm.bmWidth, bm.bmHeight, 1, 1, NULL);
     SelectObject(hMaskDC, hMaskBmp);
 
     bRet = BitBlt(hMaskDC, 0, 0, bm.bmWidth, bm.bmHeight,
@@ -187,19 +187,19 @@ TransparentBltEx(
                   hMaskDC, 0, 0, DSTERASE);
 
     /* draw background */
-    bRet = BitBlt(hdc, 
-                  prc->left + leftmargin, 
-                  prc->top  + topmargin, 
+    bRet = BitBlt(hdc,
+                  prc->left + leftmargin,
+                  prc->top  + topmargin,
                   prc->right,
-                  prc->bottom, 
+                  prc->bottom,
                   hMaskDC, 0, 0, SRCAND);
 
     /* draw foreground */
-    bRet = BitBlt(hdc, 
-                  prc->left + leftmargin, 
-                  prc->top  + topmargin, 
+    bRet = BitBlt(hdc,
+                  prc->left + leftmargin,
+                  prc->top  + topmargin,
                   prc->right,
-                  prc->bottom, 
+                  prc->bottom,
                   hBmpDC, 0, 0, SRCPAINT);
 
     DeleteObject(&bm);
@@ -214,7 +214,7 @@ TransparentBltEx(
     return bRet;
 }
 
-EXPORT void 
+EXPORT void
 SetAbsoluteForegroundWindow(HWND hWnd) /* target window handle */
 /*
  * Bring target window to the front
@@ -243,7 +243,7 @@ SetAbsoluteForegroundWindow(HWND hWnd) /* target window handle */
 
     /* bring target window to the front */
     SetForegroundWindow(hWnd);
-    
+
     if(SPI_SETFOREGROUNDLOCKTIMEOUT)
     {
         /* restore the setting */
@@ -254,7 +254,7 @@ SetAbsoluteForegroundWindow(HWND hWnd) /* target window handle */
 }
 
 
-void 
+void
 EmergeLButtonMenu(HWND  hwnd,   /* parent window handle */
                   HMENU hmenu)  /* the menu handle */
 /*
@@ -268,28 +268,28 @@ EmergeLButtonMenu(HWND  hwnd,   /* parent window handle */
     SetAbsoluteForegroundWindow(hwnd);
 
     /* show menu */
-    TrackPopupMenu(hmenu, 
-                   TPM_RIGHTALIGN, 
-                   pt.x, 
-                   pt.y, 
-                   0, 
-                   hwnd, 
+    TrackPopupMenu(hmenu,
+                   TPM_RIGHTALIGN,
+                   pt.x,
+                   pt.y,
+                   0,
+                   hwnd,
                    NULL);
-    
+
     /* hide menu */
     PostMessage(hwnd, WM_NULL, 0, 0);
 }
 
-EXPORT HFONT 
+EXPORT HFONT
 SetMenuFont(LPCTSTR face, /* font face */
             INT height)   /* font height */
 /*
 http://www.kumei.ne.jp/c_lang/sdk/sdk_46.htm
 */
-{ 
-    HFONT hFont; 
+{
+    HFONT hFont;
 
-    hFont = CreateFont(height,                        
+    hFont = CreateFont(height,
                        0,                       /* width */
                        0,                       /* escapement */
                        0,                       /* orientation */
@@ -302,8 +302,8 @@ http://www.kumei.ne.jp/c_lang/sdk/sdk_46.htm
                        CLIP_DEFAULT_PRECIS,     /* cliping precision */
                        PROOF_QUALITY,           /* output quality */
                        FIXED_PITCH | FF_MODERN, /* pitch and family */
-                       face); 
-    return hFont; 
+                       face);
+    return hFont;
 }
 
 void
@@ -314,37 +314,37 @@ HSSetMenuInfo(HWND                hwnd,   /* parent window handle */
  * create and initialize a new menu
  */
 {
-    HDC hdc = GetDC(hwnd);     
-    SIZE sz; 
+    HDC hdc = GetDC(hwnd);
+    SIZE sz;
     HFONT hFont = SetMenuFont("MS Gothic", 14);
     HFONT hFontOld = (HFONT)SelectObject(hdc, hFont);
 
     GetTextExtentPoint32(hdc,
-                         lpstr[lpMI->itemData], 
+                         lpstr[lpMI->itemData],
                          lstrlen(lpstr[lpMI->itemData]) - 1,
                          &sz);
-    lpMI->itemWidth  = sz.cx + 50; 
-    lpMI->itemHeight = sz.cy + 16; 
-    SelectObject(hdc, hFontOld); 
-    DeleteObject(hFont); 
+    lpMI->itemWidth  = sz.cx + 50;
+    lpMI->itemHeight = sz.cy + 16;
+    SelectObject(hdc, hFontOld);
+    DeleteObject(hFont);
     ReleaseDC(hwnd, hdc);
 }
 
 BOOL
 DrawVerticalBar(LPDRAWITEMSTRUCT  lpDI,
                 RECT              *prcbar)
-{ 
+{
     INT i;
 
     for (i = 0; i < prcbar->right; i++)
     {
         COLORREF color = RGB(255, 255 - i * 3, 255 - i * 5);
         HPEN hPen = CreatePen(PS_SOLID, 1, color);
-        HPEN hOldPen   = SelectObject(lpDI->hDC, hPen); 
+        HPEN hOldPen   = SelectObject(lpDI->hDC, hPen);
         MoveToEx(lpDI->hDC, i, prcbar->top, NULL);
         LineTo(lpDI->hDC, i, prcbar->bottom);
-        SelectObject(lpDI->hDC, hOldPen);     
-        DeleteObject(hPen); 
+        SelectObject(lpDI->hDC, hOldPen);
+        DeleteObject(hPen);
     }
     return  TRUE;
 }
@@ -366,7 +366,7 @@ DrawOfficeMenuBack(LPDRAWITEMSTRUCT  lpDI,
 
     /* draw vertical gradation bar */
     SetRect(&rcbar,
-            lpDI->rcItem.left, 
+            lpDI->rcItem.left,
             lpDI->rcItem.top,
             lpDI->rcItem.left + barspan,
             lpDI->rcItem.bottom);
@@ -374,7 +374,7 @@ DrawOfficeMenuBack(LPDRAWITEMSTRUCT  lpDI,
 
     /* draw the other region */
     SetRect(&rcback,
-            rcbar.right, 
+            rcbar.right,
             lpDI->rcItem.top,
             lpDI->rcItem.right,
             lpDI->rcItem.bottom);
@@ -389,21 +389,21 @@ DrawActiveRect(LPDRAWITEMSTRUCT  lpDI,
                LONG              margintop,
                LONG              marginright,
                LONG              marginbottom)
-{ 
+{
     HPEN   hPen      = CreatePen(PS_INSIDEFRAME, 1, RGB(116, 116, 116));
-    HPEN   hOldPen   = SelectObject(lpDI->hDC, hPen); 
+    HPEN   hOldPen   = SelectObject(lpDI->hDC, hPen);
     HBRUSH hBrush    = CreateSolidBrush(RGB(240, 236, 234));
-    HBRUSH hOldBrush = SelectObject(lpDI->hDC, hBrush); 
+    HBRUSH hOldBrush = SelectObject(lpDI->hDC, hBrush);
 
-    (BOOL) Rectangle(lpDI->hDC, 
-                     lpDI->rcItem.left   + marginleft, 
+    (BOOL) Rectangle(lpDI->hDC,
+                     lpDI->rcItem.left   + marginleft,
                      lpDI->rcItem.top    + margintop,
-                     lpDI->rcItem.right  - marginright, 
+                     lpDI->rcItem.right  - marginright,
                      lpDI->rcItem.bottom - marginbottom);
-    SelectObject(lpDI->hDC, hOldPen);     
-    DeleteObject(hPen); 
-    SelectObject(lpDI->hDC, hOldBrush);     
-    DeleteObject(hBrush); 
+    SelectObject(lpDI->hDC, hOldPen);
+    DeleteObject(hPen);
+    SelectObject(lpDI->hDC, hOldBrush);
+    DeleteObject(hBrush);
     return TRUE;
 }
 
@@ -412,8 +412,8 @@ DrawMenuText(LPDRAWITEMSTRUCT lpDI,
              LPCTSTR          str,
              LPCTSTR          fontface,
              UINT             fontsize,
-             COLORREF         ActiveTextColor,
-             COLORREF         InactiveTextColor,
+             COLORREF         activeTextColor,
+             COLORREF         inactiveTextColor,
              LONG             marginleft,
              LONG             margintop)
 {
@@ -422,33 +422,33 @@ DrawMenuText(LPDRAWITEMSTRUCT lpDI,
     HFONT hFont = SetMenuFont(fontface, fontsize);
     HFONT hFontOld = (HFONT)SelectObject(lpDI->hDC, hFont);
 
-    if ((lpDI->itemState  & ODS_SELECTED) && 
-        (lpDI->itemAction & (ODA_SELECT | ODA_DRAWENTIRE))) 
-    { 
+    if ((lpDI->itemState  & ODS_SELECTED) &&
+        (lpDI->itemAction & (ODA_SELECT | ODA_DRAWENTIRE)))
+    {
         DrawActiveRect(lpDI, 4, 2, 4, 2);
-        oldTextColor = SetTextColor(lpDI->hDC, RGB(145, 31, 23)); 
+        oldTextColor = SetTextColor(lpDI->hDC, activeTextColor);
     }
     else if(!(lpDI->itemState & ODS_SELECTED) &&
             (lpDI->itemAction & ODA_SELECT))
-    { 
-        oldTextColor = SetTextColor(lpDI->hDC, RGB(14, 31, 23));
+    {
+        oldTextColor = SetTextColor(lpDI->hDC, inactiveTextColor);
     }
 
     oldBkMode = SetBkMode(lpDI->hDC, TRANSPARENT);
-    TextOut(lpDI->hDC, 
+    TextOut(lpDI->hDC,
             lpDI->rcItem.left + marginleft,
             lpDI->rcItem.top  + margintop,
-            str, 
+            str,
             lstrlen(str));
     SetBkMode(lpDI->hDC, oldBkMode);
     SetTextColor(lpDI->hDC, oldTextColor);
-    SelectObject(lpDI->hDC, hFontOld); 
-    DeleteObject(hFont); 
+    SelectObject(lpDI->hDC, hFontOld);
+    DeleteObject(hFont);
 
     return TRUE;
 }
 
-void 
+void
 DrawMenuIcon(HINSTANCE hInst,
              HDC     hdc,
              PRECT   prc,
@@ -457,7 +457,7 @@ DrawMenuIcon(HINSTANCE hInst,
     BITMAP  bm;
     HBITMAP hBmp;
 
-    hBmp = LoadImage(hInst, 
+    hBmp = LoadImage(hInst,
                      MAKEINTRESOURCE(iconID),
                      IMAGE_BITMAP,
                      0,
@@ -478,11 +478,11 @@ DrawMenuIcon(HINSTANCE hInst,
 void
 DrawMenu(
          HWND              hwnd,
-         LPDRAWITEMSTRUCT  lpDI, 
+         LPDRAWITEMSTRUCT  lpDI,
          LPCTSTR           str,
          UINT              iconID
         )
-{    
+{
     HINSTANCE hInst = (HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE);
 
     /* draw background */
@@ -505,15 +505,13 @@ DrawMenu(
                  iconID);
 }
 
- 
-BOOL 
-InitInstance(HINSTANCE hInst, 
-             INT nCmdShow) 
+BOOL
+InitInstance(HINSTANCE hInst)
 /*
  * create main window
  */
-{ 
-    HWND hWnd; 
+{
+    HWND hWnd;
     NOTIFYICONDATA nIcon;
 
     hWnd = CreateWindow(IDS_CLASS,    /* window class */
@@ -526,8 +524,8 @@ InitInstance(HINSTANCE hInst,
                         NULL,         /* parent window handle */
                         NULL,         /* menu handle */
                         hInst,        /* instance handle */
-                        NULL); 
-    if (!hWnd) 
+                        NULL);
+    if (!hWnd)
     {
         return FALSE;
     }
@@ -542,28 +540,28 @@ InitInstance(HINSTANCE hInst,
 
     return Shell_NotifyIcon(NIM_ADD, &nIcon);
 }
- 
-LRESULT CALLBACK 
-WndProc(HWND hWnd, 
-        UINT msg, 
-        WPARAM wp, 
-        LPARAM lp) 
+
+LRESULT CALLBACK
+WndProc(HWND hWnd,
+        UINT msg,
+        WPARAM wp,
+        LPARAM lp)
 /*
  * the window procedure
- */ 
-{ 
-    static HMENU hmenu; 
+ */
+{
+    static HMENU hmenu;
     enum            { MENU_REGISTER, MENU_UNREGISTER, MENU_END   };
     LPCTSTR str[] = { IDS_REGISTER,  IDS_UNREGISTER,  IDS_CANCEL };
     UINT itemID[] = { IDB_CONFIG,    IDB_CONFIG,      IDB_CANCEL };
 
-    switch (msg) 
-    { 
-    case WM_MEASUREITEM: 
+    switch (msg)
+    {
+    case WM_MEASUREITEM:
         HSSetMenuInfo(hWnd, (LPMEASUREITEMSTRUCT)lp, str);
         return TRUE;
-        
-    case WM_DRAWITEM: 
+
+    case WM_DRAWITEM:
         {
             LPDRAWITEMSTRUCT lpDI = (LPDRAWITEMSTRUCT)lp;
             switch (lpDI->itemID)
@@ -587,7 +585,7 @@ WndProc(HWND hWnd,
     case WM_COMMAND:
         switch(wp)
         {
-        case IDM_STARTUP:            
+        case IDM_STARTUP:
             if (IsRegistered()) {
               UnresisterStartUp(hWnd, "", NULL);
             } else {
@@ -596,7 +594,7 @@ WndProc(HWND hWnd,
             break;
 
         case IDM_END:
-            DestroyWindow(hWnd); 
+            DestroyWindow(hWnd);
             break;
         }
         break;
@@ -612,17 +610,17 @@ WndProc(HWND hWnd,
 
             /* create task tray menu */
             hmenu = CreatePopupMenu();
-            AppendMenu(hmenu, 
-                       MF_OWNERDRAW, 
-                       IDM_STARTUP, 
+            AppendMenu(hmenu,
+                       MF_OWNERDRAW,
+                       IDM_STARTUP,
                        (LPCTSTR)MENU_REGISTER);
 
-            AppendMenu(hmenu, 
-                       MF_OWNERDRAW, 
-                       IDM_END, 
+            AppendMenu(hmenu,
+                       MF_OWNERDRAW,
+                       IDM_END,
                        (LPCTSTR)MENU_END);
         }
-        break; 
+        break;
 
     case WM_TRYCLK:
         /* process click event at tray icon */
@@ -640,79 +638,82 @@ WndProc(HWND hWnd,
         /* clean up  */
 
         /* unregister hook */
-        UnsetHaisyoHook(); 
+        UnsetHaisyoHook();
 
         /* release Mutex */
         CloseHandle(g_hMutex);
-        
+
         /* destroy popup menu */
-        DestroyMenu(hmenu); 
-        
-        PostQuitMessage(0); 
+        DestroyMenu(hmenu);
+
+        PostQuitMessage(0);
         break;
 
     default:
-        return (DefWindowProc(hWnd, msg, wp, lp)); 
+        return (DefWindowProc(hWnd, msg, wp, lp));
 
-    } 
-    return 0; 
+    }
+    return 0;
 
 }
 
-ATOM InitApp(HINSTANCE hInst) 
+ATOM InitApp(HINSTANCE hInst)
 /*
  * Register a window class
  */
 {
-    WNDCLASSEX wc; 
+    WNDCLASSEX wc;
 
-    wc.cbSize = sizeof(WNDCLASSEX); 
-    wc.style = CS_BYTEALIGNWINDOW; 
+    wc.cbSize = sizeof(WNDCLASSEX);
+    wc.style = CS_BYTEALIGNWINDOW;
     wc.lpfnWndProc = WndProc;                    /* window procedure name */
-    wc.cbClsExtra = 0; 
-    wc.cbWndExtra = 0; 
+    wc.cbClsExtra = 0;
+    wc.cbWndExtra = 0;
     wc.hInstance = hInst;                        /* module instance */
-    wc.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_HAISYO)); 
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW); 
-    wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH); 
+    wc.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_HAISYO));
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
     wc.lpszMenuName = NULL;                      /* the name of menu */
-    wc.lpszClassName = (LPCSTR)IDS_CLASS; 
-    wc.hIconSm = LoadIcon(hInst, MAKEINTRESOURCE(IDI_HAISYO)); 
+    wc.lpszClassName = (LPCSTR)IDS_CLASS;
+    wc.hIconSm = LoadIcon(hInst, MAKEINTRESOURCE(IDI_HAISYO));
 
-    return RegisterClassEx(&wc); 
+    return RegisterClassEx(&wc);
 }
 
 INT WINAPI
-WinMain(HINSTANCE hCurInst, 
-        HINSTANCE hPrevInst, 
-        LPSTR     lpsCmdLine, 
-        INT       nCmdShow) 
-{ 
-    MSG msg; 
+WinMain(HINSTANCE hCurInst,
+        HINSTANCE hPrevInst,
+        LPSTR     lpsCmdLine,
+        INT       nCmdShow)
+{
+    MSG msg;
+    UNUSED_VARIABLE(hPrevInst);
+    UNUSED_VARIABLE(lpsCmdLine);
+    UNUSED_VARIABLE(nCmdShow);
 
-    g_hMutex = CreateMutex(NULL, TRUE, "f98c3702-c97b-4b8a-a6e8-d038a583b30b");
+    g_hMutex = CreateMutex(NULL, TRUE, IDS_LOCKSTRING);
 
     if(GetLastError() == ERROR_ALREADY_EXISTS)
     {
         return FALSE;
     }
-        
-    if (!InitApp(hCurInst)) 
+
+    if (!InitApp(hCurInst))
     {
         return FALSE;
     }
 
-    if (!InitInstance(hCurInst, nCmdShow)) 
+    if (!InitInstance(hCurInst))
     {
         return FALSE;
-    } 
+    }
 
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        TranslateMessage(&msg); 
-        DispatchMessage(&msg); 
-    } 
-    return msg.wParam; 
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
 }
 
 /* EOF */

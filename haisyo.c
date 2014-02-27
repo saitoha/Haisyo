@@ -36,7 +36,7 @@
 HHOOK hHook __attribute__((section(".haisyo"), shared)) = NULL;
 #else
 # pragma data_seg(".haisyo")
-HHOOK hHook = NULL; 
+HHOOK hHook = NULL;
 # pragma data_seg()
 #endif
 
@@ -46,6 +46,8 @@ BOOL is_hooking;
 BOOL CALLBACK
 HaisyoniseWindow(HWND hwnd , LPARAM lp)
 {
+    UINT i;
+    INT origlen, newlen, postlen;
     CHAR buffer[4096];
     CHAR *p = NULL;
     CHAR *orig_words[] = {
@@ -62,12 +64,11 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
         IDS_DEKIMASU2,
         IDS_ARIMASU2
     };
-    UINT i;
-    INT origlen, newlen, postlen;
+    UNUSED_VARIABLE(lp);
 
     if (GetClassName(hwnd, buffer, 8))
     {
-        if (strcmp(buffer, "Button") == 0) 
+        if (strcmp(buffer, "Button") == 0)
         {
             if (GetWindowText(hwnd, buffer, sizeof(buffer) - 32))
             {
@@ -78,7 +79,7 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
                 else
                 {
                     p = strstr(buffer, IDS_YES);
-                    if (p) 
+                    if (p)
                     {
                         memcpy(p, IDS_HAISYO, sizeof(IDS_YES));
                     }
@@ -93,7 +94,7 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
                 for (i = 0; i < sizeof(orig_words) / sizeof(*orig_words); i++)
                 {
                     p = strstr(buffer, orig_words[i]);
-                    if (p) 
+                    if (p)
                     {
                         origlen = strlen(orig_words[i]);
                         newlen = strlen(new_words[i]);
@@ -121,7 +122,7 @@ HookProc(
 /*
  * The hook procedure for CBT actions
  */
-{ 
+{
     CWPRETSTRUCT *msg;
 
     msg = (CWPRETSTRUCT *)lp;
@@ -133,7 +134,7 @@ HookProc(
             break;
     }
 
-    return CallNextHookEx(hHook, nCode, wp, lp); 
+    return CallNextHookEx(hHook, nCode, wp, lp);
 }
 
 
@@ -146,8 +147,10 @@ DllMain(
 /*
  * save module instance handle
  */
-{    
-    switch(dwReason) 
+{
+    UNUSED_VARIABLE(lpReserved);
+
+    switch(dwReason)
     {
     case DLL_PROCESS_ATTACH:
         /* when attached */
@@ -160,16 +163,16 @@ DllMain(
 }
 
 
-EXPORT BOOL CALLBACK 
-SetHaisyoHook(void) 
+EXPORT BOOL CALLBACK
+SetHaisyoHook(void)
 /*
  * start hooking
  */
 {
-    if(!hInst) 
-    { 
+    if(!hInst)
+    {
         return FALSE;
-    } 
+    }
 
     if (is_hooking)
     {
@@ -178,15 +181,15 @@ SetHaisyoHook(void)
 
     /* set hook */
     hHook = SetWindowsHookEx(WH_CALLWNDPROCRET,
-                             HookProc, 
-                             hInst, 
+                             HookProc,
+                             hInst,
                              (ULONG)NULL);
-    is_hooking = TRUE; 
+    is_hooking = TRUE;
     return TRUE;
-} 
+}
 
-EXPORT BOOL CALLBACK 
-UnsetHaisyoHook(void) 
+EXPORT BOOL CALLBACK
+UnsetHaisyoHook(void)
 /*
  * exit hooking
  */
@@ -198,8 +201,8 @@ UnsetHaisyoHook(void)
     }
 
     hHook = NULL;
-    is_hooking = FALSE;     
+    is_hooking = FALSE;
     return TRUE;
-} 
+}
 
 /* EOF */

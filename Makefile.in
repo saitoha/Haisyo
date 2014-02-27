@@ -28,7 +28,7 @@ OBJ=.@OBJEXT@
 EXE=@EXEEXT@
 DLL=.dll
 
-CFLAGS=-O2 -pedantic -fno-strict-aliasing -fno-exceptions \
+CFLAGS=-O2 -fno-strict-aliasing -fno-exceptions \
 	   -Wall -Wextra -Werror# -Wno-unused-parameter
 PROGRAM=haisyo
 LIBS=

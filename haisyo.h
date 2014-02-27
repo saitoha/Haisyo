@@ -28,6 +28,7 @@
 #define __HOOK_H__ 1
 
 #define EXPORT __declspec(dllexport) 
+#define UNUSED_VARIABLE(x) (void)(x)
 
 EXPORT BOOL CALLBACK 
 SetHaisyoHook(void); 
