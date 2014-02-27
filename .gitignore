@@ -1,5 +1,9 @@
 .gitignore
+Makefile
+autom4te.cache/
+config.status
 .*.swp
+.*.swo
 *.RES
 *.exp
 *.lib
