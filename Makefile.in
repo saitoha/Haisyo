@@ -22,10 +22,15 @@ ZIP=@ZIP@
 TAR=@TAR@
 CP=cp
 RM=rm -f
+SCP=scp
 MKDIR=mkdir -p
+OBJ=.@OBJEXT@
+EXE=@EXEEXT@
+DLL=.dll
 
-CFLAGS=-O2 -Wall -fno-strict-aliasing
-TARGET=haisyo
+CFLAGS=-O2 -pedantic -fno-strict-aliasing -fno-exceptions \
+	   -Wall -Wextra -Werror# -Wno-unused-parameter
+PROGRAM=haisyo
 LIBS=
 PACKAGE=@PACKAGE_NAME@-@PACKAGE_VERSION@
 ARCHIVE=$(PACKAGE).tar.gz
@@ -34,29 +39,29 @@ ARCHIVE=$(PACKAGE).tar.gz
 
 all: build
 
-build: $(TARGET)@EXEEXT@ haisyo.dll
+build: $(PROGRAM)$(EXE) $(PROGRAM)$(DLL)
 
 run: build
-	cygstart ./$(TARGET)@EXEEXT@
+	cygstart ./$(PROGRAM)@EXEEXT@
 
 clean:
-	$(RM) *.obj *.dll *.res *.RES *.exp *.lib *.log
-	$(RM) *.zip *.tar.gz *.@OBJEXT@ *@EXEEXT@
+	$(RM) *$(OBJ) *$(EXE) *$(DLL) *.res *.RES *.exp *.lib *.log
+	$(RM) *.zip *.tar.gz
 	$(RM) -r @PACKAGE_NAME@-*
 
 distclean: clean
 	$(RM) -r autom4te.cache config.status Makefile
 
-c.@OBJEXT@: Makefile 
+c$(OBJ): Makefile 
 	$(CC) $(CFLAGS) -c $< -o $@
 
-haisyo.dll: haisyo.@OBJEXT@
+$(PROGRAM)$(DLL): $(PROGRAM)$(OBJ)
 	$(CC) $(CFLAGS) -shared -o $@ $< $(LIBS)
 
-$(TARGET).res.@OBJEXT@: $(TARGET).rc
+$(PROGRAM).res$(OBJ): $(PROGRAM).rc
 	$(RC) $< -o $@
 
-$(TARGET)@EXEEXT@: main.@OBJEXT@ haisyo.dll $(TARGET).res.@OBJEXT@
+$(PROGRAM)$(EXE): main$(OBJ) $(PROGRAM)$(DLL) $(PROGRAM).res$(OBJ)
 	$(CC) -mwindows $(CFLAGS) -o $@ $^ $(LIBS)
 
 dist: clean build
@@ -64,20 +69,22 @@ dist: clean build
 	$(RM) -r $(PACKAGE)
 	$(MKDIR) $(PACKAGE)/src
 	$(CP) COPYING.txt README.md $(PACKAGE)
-	$(CP) *@EXEEXT@ *.dll $(PACKAGE)
+	$(CP) *$(EXE) *$(DLL) $(PACKAGE)
 	$(CP) *.c *.h *.rc *.def *.ico *.bmp $(PACKAGE)/src
 	$(CP) *.mk Makefile.in configure config.h.in $(PACKAGE)/src/
 	$(TAR) cz $(PACKAGE) > $(PACKAGE).tar.gz
 	test -n "$(ZIP)" && $(ZIP) -r $(PACKAGE).zip $(PACKAGE)
 
 upload: dist
-	scp $(PACKAGE).tar.gz zuse:/var/www/misc/@PACKAGE_NAME@-latest.tar.gz
-	scp $(PACKAGE).zip zuse:/var/www/misc/@PACKAGE_NAME@-latest.zip
-	scp haisyo.dll haisyo.exe zuse:/var/www/misc/
+	$(SCP) $(PACKAGE).tar.gz zuse:/var/www/misc/@PACKAGE_NAME@-latest.tar.gz
+	$(SCP) $(PACKAGE).zip zuse:/var/www/misc/@PACKAGE_NAME@-latest.zip
+	$(SCP) $(PROGRAM)$(DLL) $(PROGRAM)$(EXE) zuse:/var/www/misc/
 
 configure: configure.ac
 	autoconf
 
 Makefile: Makefile.in configure
 	./configure
+
+Makefile.in: clean
 
