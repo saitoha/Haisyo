@@ -29,7 +29,7 @@ EXE=@EXEEXT@
 DLL=.dll
 
 CFLAGS=-O2 -fno-strict-aliasing -fno-exceptions \
-	   -Wall -Wextra -Werror# -Wno-unused-parameter
+	   -Wall -Wextra -Werror -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast # -Wno-unused-parameter
 PROGRAM=haisyo
 LIBS=
 PACKAGE=@PACKAGE_NAME@-@PACKAGE_VERSION@
