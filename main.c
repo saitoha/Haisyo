@@ -119,7 +119,6 @@ LONG IsRegistered()
                         &hKey);
 
     if (ret != ERROR_SUCCESS) {
-            MessageBox(0,"1",0,0);
         return FALSE;
     }
 
