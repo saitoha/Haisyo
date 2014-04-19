@@ -28,10 +28,11 @@
 #include "haisyo.h"
 #include "resource.h"
 
-#if !defined(GWL_HINSTANCE)
-# define GWL_HINSTANCE (-6)
-#endif
+#if !defined(WIN64)
 
+# if !defined(GWL_HINSTANCE)
+#  define GWL_HINSTANCE (-6)
+# endif
 
 BOOL
 ResisterStartUp()
@@ -704,18 +705,33 @@ void Launch64bitSurrogate()
     }
 }
 
+#endif  /* !defined(WIN64) */
+
 INT WINAPI
 WinMain(HINSTANCE hCurInst,
         HINSTANCE hPrevInst,
         LPSTR     lpsCmdLine,
         INT       nCmdShow)
 {
-    MSG msg;
     HANDLE hMutex;
 
     UNUSED_VARIABLE(hPrevInst);
     UNUSED_VARIABLE(lpsCmdLine);
     UNUSED_VARIABLE(nCmdShow);
+#if WIN64
+    UNUSED_VARIABLE(hCurInst);
+    hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, IDS_LOCKSTRING);
+    if (hMutex) {
+        if(SetHaisyoHook()) {
+            WaitForSingleObject(hMutex , INFINITE);
+            UnsetHaisyoHook();
+        }
+        ReleaseMutex(hMutex);
+        CloseHandle(hMutex);
+    }
+    return 0;
+#else
+    MSG msg;
 
     hMutex = CreateMutex(NULL, TRUE, IDS_LOCKSTRING);
 
@@ -744,6 +760,7 @@ WinMain(HINSTANCE hCurInst,
     CloseHandle(hMutex);
 
     return msg.wParam;
+#endif  /* WIN64 */
 }
 
 /* EOF */
