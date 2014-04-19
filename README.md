@@ -26,6 +26,14 @@ Haisyo
 GNU GENERAL PUBLIC LICENSE Version 3
 
 
+スクリーンショット
+------------------
+
+![Windows 2000](http://zuse.jp/misc/haisyo-win2000.png)
+
+![Windows Server 2012 64bit](http://zuse.jp/misc/haisyo-winserver2012.png)
+
+
 ダウンロード
 ------------
 
