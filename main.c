@@ -675,6 +675,35 @@ ATOM InitApp(HINSTANCE hInst)
     return RegisterClassEx(&wc);
 }
 
+/* ref: http://blog.monoweb.info/blog/2009/09/13/64bit-hook */
+void Launch64bitSurrogate()
+{
+    typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+    LPFN_ISWOW64PROCESS fnIsWow64Process;
+    STARTUPINFO lpStartupInfo;
+    PROCESS_INFORMATION lpProcessInformation;
+    CHAR szPath[_MAX_PATH * 2];
+    CHAR szDir[_MAX_PATH * 2];
+    CHAR sz64BinaryPath[_MAX_PATH * 2];
+    BOOL is_wow64;
+    HMODULE hKernel32;
+
+    hKernel32 = GetModuleHandleA("kernel32");
+    fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(hKernel32, "IsWow64Process");
+    is_wow64 = FALSE;
+    if (fnIsWow64Process && fnIsWow64Process(GetCurrentProcess(), &is_wow64) && is_wow64) {
+        if (GetModuleFileNameA(NULL, szPath, sizeof(szPath))) {
+            _splitpath(szPath, sz64BinaryPath, szDir, NULL, NULL); 
+            if (strcat(sz64BinaryPath, szDir) && strcat(sz64BinaryPath, "haisyo64surrogate.exe")) {
+                GetStartupInfo(&lpStartupInfo);
+                CreateProcess(NULL, sz64BinaryPath,
+                              0, 0, FALSE, NORMAL_PRIORITY_CLASS,
+                              0, 0, &lpStartupInfo, &lpProcessInformation);
+            }
+        }
+    }
+}
+
 INT WINAPI
 WinMain(HINSTANCE hCurInst,
         HINSTANCE hPrevInst,
