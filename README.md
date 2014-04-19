@@ -51,9 +51,9 @@ MinGWでビルドしました。
 * MinGW環境を作ります。
   Debianだと以下のようにしてクロスコンパイル環境を作ります。
 
-```
-$ sudo apt-get install build-dep mingw-w64
-```
+  ```
+  $ sudo apt-get install build-dep mingw-w64
+  ```
 
   Mac/Cygwin/MSYS環境でもビルドできると思います。
   できなかったらissueをたててください。
@@ -61,15 +61,15 @@ $ sudo apt-get install build-dep mingw-w64
 
 * ./configure します。
 
-```
-$ ./configure
-```
+  ```
+  $ ./configure
+  ```
 
 * make します。
 
-```
-$ make dist
-```
+  ```
+  $ make dist
+  ```
 
 * zip パッケージができます。
   Windows環境にもっていってください。
@@ -83,12 +83,12 @@ $ make dist
   64bitコンパイラが見つからないと32bit版だけ作ろうとするので、
   明示的にこれを指定したい場合は、例えば
 
-```
-$ CC=i686-w64-mingw32-gcc \
-  RC=i686-w64-mingw32-windres \
-  CC64=x86_64-w64-mingw32-gcc \
-  RC64=x86_64-w64-mingw32-windres ./configure
-```
+  ```
+  $ CC=i686-w64-mingw32-gcc \
+    RC=i686-w64-mingw32-windres \
+    CC64=x86_64-w64-mingw32-gcc \
+    RC64=x86_64-w64-mingw32-windres ./configure
+  ```
 
   のようにして下さい。
 
