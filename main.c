@@ -32,7 +32,6 @@
 # define GWL_HINSTANCE (-6)
 #endif
 
-HANDLE g_hMutex;
 
 BOOL
 ResisterStartUp()
@@ -639,9 +638,6 @@ WndProc(HWND hWnd,
         /* unregister hook */
         UnsetHaisyoHook();
 
-        /* release Mutex */
-        CloseHandle(g_hMutex);
-
         /* destroy popup menu */
         DestroyMenu(hmenu);
 
@@ -686,11 +682,13 @@ WinMain(HINSTANCE hCurInst,
         INT       nCmdShow)
 {
     MSG msg;
+    HANDLE hMutex;
+
     UNUSED_VARIABLE(hPrevInst);
     UNUSED_VARIABLE(lpsCmdLine);
     UNUSED_VARIABLE(nCmdShow);
 
-    g_hMutex = CreateMutex(NULL, TRUE, IDS_LOCKSTRING);
+    hMutex = CreateMutex(NULL, TRUE, IDS_LOCKSTRING);
 
     if(GetLastError() == ERROR_ALREADY_EXISTS)
     {
@@ -712,6 +710,10 @@ WinMain(HINSTANCE hCurInst,
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+
+    ReleaseMutex(hMutex);
+    CloseHandle(hMutex);
+
     return msg.wParam;
 }
 
