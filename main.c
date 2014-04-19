@@ -750,6 +750,8 @@ WinMain(HINSTANCE hCurInst,
         return FALSE;
     }
 
+    Launch64bitSurrogate();
+
     while (GetMessage(&msg, NULL, 0, 0))
     {
         TranslateMessage(&msg);
