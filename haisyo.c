@@ -56,14 +56,16 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
         IDS_SHIMASUKA1,
         IDS_SHIMASU1,
         IDS_DEKIMASU1,
-        IDS_ARIMASU1
+        IDS_ARIMASU1,
+        IDS_IMASU1
     };
     CHAR *new_words[] = {
         IDS_KUDASAI2,
         IDS_SHIMASUKA2,
         IDS_SHIMASU2,
         IDS_DEKIMASU2,
-        IDS_ARIMASU2
+        IDS_ARIMASU2,
+        IDS_IMASU2
     };
     UNUSED_VARIABLE(lp);
 

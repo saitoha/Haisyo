@@ -47,6 +47,8 @@
 #define IDS_DEKIMASU2                   "できる旨ご承知頂きたく"
 #define IDS_ARIMASU1                    "あります"
 #define IDS_ARIMASU2                    "ある旨ご承知頂きたく"
+#define IDS_IMASU1                      "います。"
+#define IDS_IMASU2                      "いる旨ご承知頂きたく。"
 
 #define IDS_REGKEY_RUN                  "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
 #define IDS_LOCKSTRING                  "f98c3702-c97b-4b8a-a6e8-d038a583b30b"
