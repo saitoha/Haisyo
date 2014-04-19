@@ -43,7 +43,8 @@ HHOOK hHook = NULL;
 HINSTANCE hInst;      /* dll instance */
 BOOL is_hooking;
 
-BOOL CALLBACK
+/* typedef WINBOOL (CALLBACK *WNDENUMPROC)(HWND,LPARAM); */
+WINBOOL CALLBACK
 HaisyoniseWindow(HWND hwnd , LPARAM lp)
 {
     UINT i;
@@ -106,7 +107,7 @@ HaisyoniseWindow(HWND hwnd , LPARAM lp)
 
                 SetWindowText(hwnd, buffer);
             }
-            EnumChildWindows(hwnd, HaisyoniseWindow, (LONG)NULL);
+            EnumChildWindows(hwnd, (WNDENUMPROC)HaisyoniseWindow, (LPARAM)0LL);
         }
     }
 
@@ -129,7 +130,7 @@ HookProc(
     switch (msg->message) {
         case WM_ACTIVATE:
         case WM_CREATE:
-            HaisyoniseWindow((HWND)msg->hwnd, (LONG)NULL);
+            HaisyoniseWindow((HWND)msg->hwnd, (LPARAM)NULL);
         default:
             break;
     }
@@ -183,7 +184,7 @@ SetHaisyoHook(void)
     hHook = SetWindowsHookEx(WH_CALLWNDPROCRET,
                              HookProc,
                              hInst,
-                             (ULONG)NULL);
+                             0LL);
     is_hooking = TRUE;
     return TRUE;
 }
