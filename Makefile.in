@@ -105,7 +105,7 @@ dist: clean build
 upload: dist
 	$(SCP) $(PACKAGE).tar.gz zuse:/var/www/misc/@PACKAGE_NAME@-latest.tar.gz
 	$(SCP) $(PACKAGE).zip zuse:/var/www/misc/@PACKAGE_NAME@-latest.zip
-	$(SCP) $(PROGRAM)$(DLL) $(PROGRAM)$(EXE) zuse:/var/www/misc/
+	$(SCP) $(TARGETS) zuse:/var/www/misc/
 
 configure: configure.ac
 	autoconf
