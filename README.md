@@ -14,7 +14,12 @@ Haisyo
 動作環境
 --------
 
-Windows 2000 sp4 と Windows XP sp3 と Windows 7 sp1 (32bit) で動作確認しました。
+以下のOSで動作確認しました
+
+    * Windows 2000 sp4
+    * Windows XP sp3
+    * Windows 7 sp1 (32bit)
+    * Windows Server 2012 (64bit) (バージョン1.3.0から)
 
 ライセンス
 ----------
@@ -62,7 +67,25 @@ $ make dist
   Windows環境にもっていってください。
 
 
-### MSVCでビルド
+* 2014-04-19 64bit Windows に対応しました。
+
+  x86_64なmingwが見つかると、64bit版フックDLL(haisyo64.dll)と
+  サロゲート用実行ファイル(haisyo64surrogete.exe)を作成するようになります。
+
+  64bitコンパイラが見つからないと32bit版だけ作ろうとするので、
+  明示的にこれを指定したい場合は、例えば
+
+```
+$ CC=i686-w64-mingw32-gcc \
+  RC=i686-w64-mingw32-windres \
+  CC64=x86_64-w64-mingw32-gcc \
+  RC64=x86_64-w64-mingw32-windres ./configure
+```
+
+  のようにして下さい。
+
+
+### MSVCでビルド (64bit非対応)
 
 * MSVC環境を作ります。
 
@@ -76,7 +99,7 @@ $ nmake -f msvc.mk
   適当な場所に配置して下さい。
 
 
-### Cygwin + MSVCでビルド
+### Cygwin + MSVCでビルド (64bit非対応)
 
 * Cygwinをインストールします。makeを入れておいて下さい。
 
