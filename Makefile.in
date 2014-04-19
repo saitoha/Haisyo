@@ -18,6 +18,8 @@
 
 CC=@CC@
 RC=@RC@ -O coff
+CC64=@CC64@
+RC64=@RC64@ -O coff
 ZIP=@ZIP@
 TAR=@TAR@
 CP=cp
@@ -28,8 +30,15 @@ OBJ=.@OBJEXT@
 EXE=@EXEEXT@
 DLL=.dll
 
+TARGETS+= $(PROGRAM)$(EXE) $(PROGRAM)$(DLL)
+ifneq (x@CC64@,x)
+	ifneq (x@RC64@,x)
+		TARGETS+= $(PROGRAM)64surrogate$(EXE) $(PROGRAM)64$(DLL)
+	endif
+endif
+
 CFLAGS=-O2 -fno-strict-aliasing -fno-exceptions \
-	   -Wall -Wextra -Werror -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast # -Wno-unused-parameter
+	   -Wall -Wextra -Werror
 PROGRAM=haisyo
 LIBS=
 PACKAGE=@PACKAGE_NAME@-@PACKAGE_VERSION@
@@ -39,7 +48,7 @@ ARCHIVE=$(PACKAGE).tar.gz
 
 all: build
 
-build: $(PROGRAM)$(EXE) $(PROGRAM)$(DLL)
+build: $(TARGETS)
 
 run: build
 	cygstart ./$(PROGRAM)@EXEEXT@
@@ -52,17 +61,35 @@ clean:
 distclean: clean
 	$(RM) -r autom4te.cache config.status Makefile
 
-c$(OBJ): Makefile 
+main.o: main.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+main64.o: main.c
+	$(CC64) $(CFLAGS) -c $< -o $@
+
+$(PROGRAM)$(OBJ): haisyo.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(PROGRAM)64$(OBJ): haisyo.c
+	$(CC64) $(CFLAGS) -c $< -o $@
 
 $(PROGRAM)$(DLL): $(PROGRAM)$(OBJ)
 	$(CC) $(CFLAGS) -shared -o $@ $< $(LIBS)
 
+$(PROGRAM)64$(DLL): $(PROGRAM)64$(OBJ)
+	$(CC64) $(CFLAGS) -shared -o $@ $< $(LIBS)
+
 $(PROGRAM).res$(OBJ): $(PROGRAM).rc
 	$(RC) $< -o $@
 
+$(PROGRAM)64.res$(OBJ): $(PROGRAM).rc
+	$(RC64) $< -o $@
+
 $(PROGRAM)$(EXE): main$(OBJ) $(PROGRAM)$(DLL) $(PROGRAM).res$(OBJ)
 	$(CC) -mwindows $(CFLAGS) -o $@ $^ $(LIBS)
+
+$(PROGRAM)64surrogate$(EXE): main64$(OBJ) $(PROGRAM)64$(DLL) $(PROGRAM)64.res$(OBJ)
+	$(CC64) -mwindows $(CFLAGS) -o $@ $^ $(LIBS)
 
 dist: clean build
 	$(RM) $@
