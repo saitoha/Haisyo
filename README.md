@@ -23,7 +23,7 @@ Haisyo
 
 ライセンス
 ----------
-Haisyoは、[GNU GENERAL PUBLIC LICENSE Version 3](http://www.gnu.org/licenses/gpl.html)でライセンスされたフリーソフトウェアです。
+[GNU GENERAL PUBLIC LICENSE Version 3](http://www.gnu.org/licenses/gpl.html)でライセンスされたフリーソフトウェアとして提供されます。
 
 ![GPLv3](http://zuse.jp/misc/gplv3.png)
 
