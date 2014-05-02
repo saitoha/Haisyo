@@ -1,6 +1,8 @@
 Haisyo
 ======
 
+[![Build Status](https://travis-ci.org/saitoha/Haisyo.svg)](https://travis-ci.org/saitoha/Haisyo)
+
 - Windowsデスクトップ環境のダイアログリソースを微妙に拝承化します。
   仕事してる気分になりますよね。
 
