@@ -14,6 +14,10 @@ AC_PROG_CC([mingw32-gcc \
             i586-mingw32-gcc \
             i486-mingw32-gcc \
             i386-mingw32-gcc \
+            i686-mingw32msvc-gcc \
+            i586-mingw32msvc-gcc \
+            i486-mingw32msvc-gcc \
+            i386-mingw32msvc-gcc \
             i686-w64-mingw32-gcc \
             i586-w64-mingw32-gcc \
             i486-w64-mingw32-gcc \
@@ -30,6 +34,10 @@ AC_CHECK_PROGS([RC],
                i586-mingw32-windres \
                i486-mingw32-windres \
                i386-mingw32-windres \
+               i686-mingw32msvc-windres \
+               i586-mingw32msvc-windres \
+               i486-mingw32msvc-windres \
+               i386-mingw32msvc-windres \
                i686-w64-mingw32-windres \
                i586-w64-mingw32-windres \
                i486-w64-mingw32-windres \
@@ -43,8 +51,10 @@ if test -z "${RC}"; then
     AC_MSG_ERROR(windres command is not found.);
 fi
 
-AC_CHECK_PROGS([CC64], [x86_64-w64-mingw32-gcc], [])
-AC_CHECK_PROGS([RC64], [x86_64-w64-mingw32-windres], [])
+AC_CHECK_PROGS([CC64], [x86_64-w64-mingw32-gcc \
+                        amd64-mingw32msvc-gcc], [])
+AC_CHECK_PROGS([RC64], [x86_64-w64-mingw32-windres \
+                        amd64-mingw32msvc-windress], [])
 
 AC_CHECK_PROG(ZIP, zip, zip)
 AC_CHECK_PROG(TAR, tar, tar)
