@@ -1,0 +1,22 @@
+
+language: c
+
+env:
+  - XCC=i686-w64-mingw32-gcc HOST=i686-w64-mingw32
+  - XCC=i586-mingw32msvc-gcc HOST=i586-mingw32msvc
+  - XCC=x86_64-w64-mingw32-gcc HOST=x86_64-w64-mingw32
+
+before_install:
+  - "if [ x$XCC = xi686-w64-mingw32-gcc ]; then sudo apt-get install -qq gcc-mingw-w64-i686 binutils-mingw-w64-i686; fi"
+  - "if [ x$XCC = xi586-mingw32msvc-gcc ]; then sudo apt-get install -qq mingw32; fi"
+  - "if [ x$XCC = xx86_64-w64-mingw32-gcc ]; then sudo apt-get install -qq gcc-mingw-w64-x86-64 binutils-mingw-w64-x86-64; fi"
+
+before_script:
+  - "uname -a"
+  - "uname -r"
+  - "CC=$XCC ./configure --host=$HOST"
+
+script:
+  - "make"
+  - "make dist"
+
