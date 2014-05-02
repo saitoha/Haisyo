@@ -97,7 +97,7 @@ dist: clean build
 	$(MKDIR) $(PACKAGE)/src
 	$(CP) COPYING.txt README.md $(PACKAGE)
 	$(CP) *$(EXE) *$(DLL) $(PACKAGE)
-	$(CP) *.c *.h *.rc *.def *.ico *.bmp $(PACKAGE)/src
+	$(CP) *.c *.h *.rc *.def *.ico *.bmp .travis.yml .gitignore $(PACKAGE)/src
 	$(CP) *.mk Makefile.in configure config.h.in $(PACKAGE)/src/
 	$(TAR) cz $(PACKAGE) > $(PACKAGE).tar.gz
 	test -n "$(ZIP)" && $(ZIP) -r $(PACKAGE).zip $(PACKAGE)
