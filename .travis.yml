@@ -4,7 +4,6 @@ language: c
 before_install:
   - "sudo apt-get install -qq gcc-mingw-w64-i686 binutils-mingw-w64-i686"
   - "sudo apt-get install -qq gcc-mingw-w64-x86-64 binutils-mingw-w64-x86-64"
-  - "sudo apt-get install -qq mingw32"
 
 before_script:
   - "uname -a"
