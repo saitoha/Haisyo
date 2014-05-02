@@ -1,7 +1,9 @@
 
 language: c
 
-install: mingw32 mingw-w64
+before_install:
+  - "sudo apt-get install -qq mingw-w64"
+  - "sudo apt-get install -qq mingw32"
 
 before_script:
   - "uname -a"
