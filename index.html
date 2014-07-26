@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Haisyo : 拝承 / hái ʃóu / hyper-context O.K.&#39;ing protocol" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Haisyo</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/saitoha/Haisyo">View on GitHub</a>
+
+          <h1 id="project_title">Haisyo</h1>
+          <h2 id="project_tagline">拝承 / hái ʃóu / hyper-context O.K.&#39;ing protocol</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/saitoha/Haisyo/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/saitoha/Haisyo/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="haisyo" class="anchor" href="#haisyo"><span class="octicon octicon-link"></span></a>Haisyo</h1>
+
+<p><a href="https://travis-ci.org/saitoha/Haisyo"><img src="https://travis-ci.org/saitoha/Haisyo.svg" alt="Build Status"></a></p>
+
+<ul>
+<li>Windowsデスクトップ環境のダイアログリソースを微妙に拝承化します。
+仕事してる気分になりますよね。</li>
+</ul><p><img src="http://zuse.jp/misc/haisyo-example.png" alt="Haisyo"></p>
+
+<ul>
+<li>タスクバーにトレイが出ます。</li>
+</ul><p><img src="http://zuse.jp/misc/haisyo-tray.png" alt="Haisyo"></p>
+
+<h2>
+<a name="%E5%8B%95%E4%BD%9C%E7%92%B0%E5%A2%83" class="anchor" href="#%E5%8B%95%E4%BD%9C%E7%92%B0%E5%A2%83"><span class="octicon octicon-link"></span></a>動作環境</h2>
+
+<p>以下のOSで動作確認しました</p>
+
+<pre><code>* Windows 2000 sp4
+* Windows XP sp3
+* Windows 7 sp1 (32bit)
+* Windows Server 2012 (64bit) (バージョン1.3.0から)
+</code></pre>
+
+<h2>
+<a name="%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9" class="anchor" href="#%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9"><span class="octicon octicon-link"></span></a>ライセンス</h2>
+
+<p><a href="http://www.gnu.org/licenses/gpl.html">GNU GENERAL PUBLIC LICENSE Version 3</a>でライセンスされた<a href="http://www.gnu.org/philosophy/free-sw.ja.html">自由ソフトウェア</a>として提供されます。</p>
+
+<p><img src="http://zuse.jp/misc/gplv3.png" alt="GPLv3"></p>
+
+<h2>
+<a name="%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88" class="anchor" href="#%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88"><span class="octicon octicon-link"></span></a>スクリーンショット</h2>
+
+<p><img src="http://zuse.jp/misc/haisyo-win2000.png" alt="Windows 2000"></p>
+
+<p><img src="http://zuse.jp/misc/haisyo-winserver2012.png" alt="Windows Server 2012 64bit"></p>
+
+<h2>
+<a name="%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89" class="anchor" href="#%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89"><span class="octicon octicon-link"></span></a>ダウンロード</h2>
+
+<p>MinGWでビルドしました。</p>
+
+<ul>
+<li><a href="http://zuse.jp/misc/haisyo-latest.zip">haisyo-latest.zip</a></li>
+<li><a href="http://zuse.jp/misc/haisyo-latest.tar.gz">haisyo-latest.tar.gz</a></li>
+</ul><h2>
+<a name="%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95" class="anchor" href="#%E3%83%93%E3%83%AB%E3%83%89%E6%96%B9%E6%B3%95"><span class="octicon octicon-link"></span></a>ビルド方法</h2>
+
+<h3>
+<a name="mingw%E3%81%A7%E3%83%93%E3%83%AB%E3%83%89" class="anchor" href="#mingw%E3%81%A7%E3%83%93%E3%83%AB%E3%83%89"><span class="octicon octicon-link"></span></a>MinGWでビルド</h3>
+
+<ul>
+<li>
+<p>MinGW環境を作ります。
+Debianだと以下のようにしてクロスコンパイル環境を作ります。</p>
+
+<pre><code>$ sudo apt-get install build-dep mingw-w64
+</code></pre>
+
+<p>Mac/Cygwin/MSYS環境でもビルドできると思います。
+できなかったらissueをたててください。</p>
+</li>
+<li>
+<p>./configure します。</p>
+
+<pre><code>$ ./configure
+</code></pre>
+</li>
+<li>
+<p>make します。</p>
+
+<pre><code>$ make dist
+</code></pre>
+</li>
+<li><p>zip パッケージができます。
+Windows環境にもっていってください。</p></li>
+<li>
+<p>2014-04-19 64bit Windows に対応しました。</p>
+
+<p>x86_64なmingwが見つかると、64bit版フックDLL(haisyo64.dll)と
+サロゲート用実行ファイル(haisyo64surrogete.exe)を作成するようになります。</p>
+
+<p>64bitコンパイラが見つからないと32bit版だけ作ろうとするので、
+明示的にこれを指定したい場合は、例えば</p>
+
+<pre><code>$ CC=i686-w64-mingw32-gcc \
+  RC=i686-w64-mingw32-windres \
+  CC64=x86_64-w64-mingw32-gcc \
+  RC64=x86_64-w64-mingw32-windres ./configure
+</code></pre>
+
+<p>のようにして下さい。</p>
+</li>
+</ul><h3>
+<a name="msvc%E3%81%A7%E3%83%93%E3%83%AB%E3%83%89-64bit%E9%9D%9E%E5%AF%BE%E5%BF%9C" class="anchor" href="#msvc%E3%81%A7%E3%83%93%E3%83%AB%E3%83%89-64bit%E9%9D%9E%E5%AF%BE%E5%BF%9C"><span class="octicon octicon-link"></span></a>MSVCでビルド (64bit非対応)</h3>
+
+<ul>
+<li><p>MSVC環境を作ります。</p></li>
+<li><p>nmake します。</p></li>
+</ul><pre><code>$ nmake -f msvc.mk
+</code></pre>
+
+<ul>
+<li>haisyo.exe と haisyo.dll ができあがります。
+適当な場所に配置して下さい。</li>
+</ul><h3>
+<a name="cygwin--msvc%E3%81%A7%E3%83%93%E3%83%AB%E3%83%89-64bit%E9%9D%9E%E5%AF%BE%E5%BF%9C" class="anchor" href="#cygwin--msvc%E3%81%A7%E3%83%93%E3%83%AB%E3%83%89-64bit%E9%9D%9E%E5%AF%BE%E5%BF%9C"><span class="octicon octicon-link"></span></a>Cygwin + MSVCでビルド (64bit非対応)</h3>
+
+<ul>
+<li><p>Cygwinをインストールします。makeを入れておいて下さい。</p></li>
+<li><p>Visual C++ 2008 を入れます。(Expressでいいです)</p></li>
+<li><p>make します。</p></li>
+</ul><pre><code>$ make -f cygwin-msvc.mk dist
+</code></pre>
+
+<p>環境により、ちょっとcygwin-msvcをいじる必要があるかもしれません。</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Haisyo maintained by <a href="https://github.com/saitoha">saitoha</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
