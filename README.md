@@ -6,11 +6,11 @@ Haisyo
 - Windowsデスクトップ環境のダイアログリソースを微妙に拝承化します。
   仕事してる気分になりますよね。
 
-![Haisyo](http://zuse.jp/misc/haisyo-example.png)
+![Haisyo](http://raw.githubusercontent.com/saitoha/Haisyo/data/datahaisyo-example.png)
 
 - タスクバーにトレイが出ます。
 
-![Haisyo](http://zuse.jp/misc/haisyo-tray.png)
+![Haisyo](http://raw.githubusercontent.com/saitoha/Haisyo/data/datahaisyo-tray.png)
 
 
 動作環境
@@ -27,14 +27,14 @@ Haisyo
 ----------
 [GNU GENERAL PUBLIC LICENSE Version 3](http://www.gnu.org/licenses/gpl.html)でライセンスされた[自由ソフトウェア](http://www.gnu.org/philosophy/free-sw.ja.html)として提供されます。
 
-![GPLv3](http://zuse.jp/misc/gplv3.png)
+![GPLv3](http://raw.githubusercontent.com/saitoha/Haisyo/data/datagplv3.png)
 
 スクリーンショット
 ------------------
 
-![Windows 2000](http://zuse.jp/misc/haisyo-win2000.png)
+![Windows 2000](http://raw.githubusercontent.com/saitoha/Haisyo/data/datahaisyo-win2000.png)
 
-![Windows Server 2012 64bit](http://zuse.jp/misc/haisyo-winserver2012.png)
+![Windows Server 2012 64bit](http://raw.githubusercontent.com/saitoha/Haisyo/data/datahaisyo-winserver2012.png)
 
 
 ダウンロード
@@ -42,8 +42,7 @@ Haisyo
 
 MinGWでビルドしました。
 
-- [haisyo-latest.zip](http://zuse.jp/misc/haisyo-latest.zip)
-- [haisyo-latest.tar.gz](http://zuse.jp/misc/haisyo-latest.tar.gz)
+https://github.com/saitoha/Haisyo/releases/latest
 
 
 ビルド方法
