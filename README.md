@@ -6,11 +6,11 @@ Haisyo
 - Windowsデスクトップ環境のダイアログリソースを微妙に拝承化します。
   仕事してる気分になりますよね。
 
-![Haisyo](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/datahaisyo-example.png)
+![Haisyo](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/haisyo-example.png)
 
 - タスクバーにトレイが出ます。
 
-![Haisyo](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/datahaisyo-tray.png)
+![Haisyo](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/haisyo-tray.png)
 
 
 動作環境
@@ -27,14 +27,14 @@ Haisyo
 ----------
 [GNU GENERAL PUBLIC LICENSE Version 3](http://www.gnu.org/licenses/gpl.html)でライセンスされた[自由ソフトウェア](http://www.gnu.org/philosophy/free-sw.ja.html)として提供されます。
 
-![GPLv3](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/datagplv3.png)
+![GPLv3](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/gplv3.png)
 
 スクリーンショット
 ------------------
 
-![Windows 2000](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/datahaisyo-win2000.png)
+![Windows 2000](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/haisyo-win2000.png)
 
-![Windows Server 2012 64bit](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/datahaisyo-winserver2012.png)
+![Windows Server 2012 64bit](http://raw.githubusercontent.com/saitoha/Haisyo/data/data/haisyo-winserver2012.png)
 
 
 ダウンロード
